@@ -1,7 +1,7 @@
 package ijmo.demo.springboard.message;
 
-
 import ijmo.demo.springboard.model.BaseEntity;
+import ijmo.demo.springboard.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,15 +34,19 @@ public class Message extends BaseEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Post post; // parent
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Comment comment; // parent
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
+
     @Builder
-    private Message(String title, String body) {
+    private Message(String title, String body, User user) {
         this.title = title;
         this.body = body;
+        this.user = user;
     }
 }

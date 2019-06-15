@@ -1,9 +1,9 @@
 package ijmo.demo.springboard;
 
-
 import ijmo.demo.springboard.message.Comment;
 import ijmo.demo.springboard.message.Message;
 import ijmo.demo.springboard.message.Post;
+import ijmo.demo.springboard.user.User;
 import org.assertj.core.api.JUnitSoftAssertions;
 import org.junit.Rule;
 
@@ -11,23 +11,25 @@ public class BaseTest {
     @Rule
     public JUnitSoftAssertions softAssertions = new JUnitSoftAssertions();
 
-    public Message newMessage(String body) {
+    protected Message newMessage(String body, User user) {
         return Message.builder()
-                .body(body).build();
+                .body(body)
+                .user(user).build();
     }
 
-    public Message newMessage(String title, String body) {
+    protected Message newMessage(String title, String body, User user) {
         return Message.builder()
                 .title(title)
-                .body(body).build();
+                .body(body)
+                .user(user).build();
     }
 
-    public Post newPost(String title, String body) {
-        return Post.builder().message(newMessage(title, body)).build();
+    protected Post newPost(String title, String body, User user) {
+        return Post.builder().message(newMessage(title, body, user)).build();
     }
 
 
-    public Comment newComment(String body, Post post) {
-        return Comment.builder().message(newMessage(body)).post(post).build();
+    protected Comment newComment(String body, Post post, User user) {
+        return Comment.builder().message(newMessage(body, user)).post(post).build();
     }
 }

@@ -1,7 +1,9 @@
 package ijmo.demo.springboard.message;
 
-
 import ijmo.demo.springboard.BaseTest;
+import ijmo.demo.springboard.user.User;
+import ijmo.demo.springboard.user.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,20 @@ import java.util.stream.IntStream;
 public class CommentTest extends BaseTest {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private PostRepository postRepository;
 
     @Autowired
     private CommentRepository commentRepository;
+
+    private User user;
+
+    @Before
+    public void setUp() {
+        user = userRepository.save(User.builder().username("test1").build());
+    }
 
     @Test
     public void addCommentTest() {
@@ -30,11 +42,9 @@ public class CommentTest extends BaseTest {
                 "Comment body 3",
                 "Comment body 4",
         };
-        Post post = postRepository.save(newPost("Some title", "Blah blah"));
+        Post post = postRepository.save(newPost("Some title", "Blah blah", user));
 
-        Arrays.asList(commentBodies).forEach(body -> {
-            post.addComment(newComment(body, post));
-        });
+        Arrays.asList(commentBodies).forEach(body -> post.addComment(newComment(body, post, user)));
         postRepository.save(post);
 
         Post found = postRepository.findAll().get(0);
