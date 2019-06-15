@@ -41,11 +41,6 @@ public class Message extends BaseEntity {
     private Comment comment; // parent
 
     @Builder
-    private Message(String body) {
-        this.body = body;
-    }
-
-    @Builder
     private Message(String title, String body) {
         this.title = title;
         this.body = body;

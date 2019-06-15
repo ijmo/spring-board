@@ -18,13 +18,13 @@ import java.util.List;
 @Table(name = "posts")
 public class Post extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Message message;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
     private List<Message> messages;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
     private List<Comment> comments;
 
     @Column(name = "comment_count")
@@ -39,7 +39,6 @@ public class Post extends BaseEntity {
         message.setRevision(1);
         this.message = message;
         getMessagesInternal().add(message);
-        getCommentsInternal();
     }
 
     public List<Message> getMessagesInternal() {
@@ -56,16 +55,9 @@ public class Post extends BaseEntity {
         return comments;
     }
 
-    public Post update(Message newMessage) {
-        newMessage.setRevision(messages.size() + 1);
-        message = newMessage;
-        messages.add(message);
-        return this;
-    }
-
     public Post addComment(Comment comment) {
         comment.setPost(this);
-        comments.add(comment);
+        getCommentsInternal().add(comment);
         commentCount++;
         return this;
     }

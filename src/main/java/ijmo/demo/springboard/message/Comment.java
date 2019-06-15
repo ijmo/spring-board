@@ -4,12 +4,14 @@ package ijmo.demo.springboard.message;
 import ijmo.demo.springboard.model.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -22,14 +24,14 @@ public class Comment extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "comment")
     private List<Message> messages;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
     @Builder
-    public Comment(Message message, Post post) {
+    private Comment(Message message, Post post) {
         message.setComment(this);
         this.message = message;
         this.post = post;

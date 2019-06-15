@@ -1,5 +1,6 @@
 package ijmo.demo.springboard.message;
 
+
 import ijmo.demo.springboard.BaseTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,33 +15,18 @@ public class PostTest extends BaseTest {
     @Autowired
     private PostRepository postRepository;
 
-    public Post newPost(String title, String body) {
-        Message message = Message.builder()
-                .title(title)
-                .body(body).build();
-        return Post.builder().message(message).build();
-    }
-
     @Test
     public void addPostTest() {
-        Post newPost = newPost("Post title 1", "Post body");
-        Post found = postRepository.save(newPost);
-        System.out.println("found: " + found.getMessage().getId());
-        softAssertions.assertThat(newPost.getMessage().getTitle())
-                .isEqualTo(found.getMessage().getTitle());
+        postRepository.save(newPost("Post title 1", "Post body"));
+        Post found = postRepository.findAll().get(0);
+        softAssertions.assertThat(found).isNotNull();
+        softAssertions.assertThat(found.getMessage().getTitle())
+                .isEqualTo("Post title 1");
+
+        found.setCommentCount(100);
 
         Post secondPost = postRepository.save(newPost("Post title2", "Post body"));
         softAssertions.assertThat(secondPost.getId())
-                .isEqualTo(2);
-    }
-
-    @Test
-    public void updatePostTest() {
-        Post post = postRepository.save(newPost("Post title1", "Post body"));
-        Post updated = post.update(Message.builder().title("Post title2").body("Post body").build());
-        softAssertions.assertThat(updated.getMessage().getTitle())
-                .isEqualTo("Post title2");
-        softAssertions.assertThat(updated.getMessage().getRevision())
                 .isEqualTo(2);
     }
 }
