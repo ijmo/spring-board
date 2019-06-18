@@ -80,13 +80,40 @@ table textarea {
   width: 120px;
 }
 
+.posts-table tbody tr:hover {
+  background: #f4f4f4;
+  cursor: pointer;
+}
+
+.posts-table tbody tr td:nth-child(2), td:nth-child(3) {
+  font-size: 10pt;
+}
+
 .post-header {
   border-bottom: 2px solid darkgray;
   margin-bottom: 10px;
 }
 
+.post-header > :nth-child(2) {
+  float: right;
+  font-size: 10pt;
+}
+
 .post-date {
-  width: 140px;
-  display: flex;
-  justify-content: flex-end;
+  margin-left: 20px;
+}
+
+.comments-header {
+  border-bottom: 1px solid lightgray;
+  font-size: 10pt;
+}
+
+.post-comments {
+  padding: 4px;
+}
+
+.comments > div {
+  margin: 6px 2px;
+  padding: 10px;
+  background: #f4f4f4;
 }

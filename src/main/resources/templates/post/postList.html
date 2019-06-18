@@ -14,11 +14,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr th:each="post : ${posts}">
-          <td th:text="${post.message.title}"/>
-          <td th:text="${post.user} ? ${post.user.username} : 'Unknown'"/>
-          <td th:text="${post.createdAt}"/>
-        </tr>
+        <th:block th:each="post : ${posts}">
+          <tr th:onclick="'location.href=\'/posts/' + ${post.id} + '\''">
+            <td th:text="${post.message.title}"/>
+            <td th:text="${post.user} ? ${post.user.username} : 'Unknown'"/>
+            <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"/>
+          </tr>
+        </th:block>
       </tbody>
     </table>
   </div>
