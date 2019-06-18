@@ -1,5 +1,6 @@
 package ijmo.demo.springboard.message;
 
+import ijmo.demo.springboard.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +26,9 @@ public class CommentService {
         return commentRepository.findAllByPostId(postId);
     }
 
-    public Optional<Comment> addComment(Message message, long postId) {
+    public Optional<Comment> addComment(Message message, long postId, User user) {
         return postService.findPostById(postId).map(post ->
-            commentRepository.save(Comment.builder().message(message).post(post).build())
+            commentRepository.save(Comment.builder().message(message).post(post).user(user).build())
         );
     }
 

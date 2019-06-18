@@ -35,7 +35,7 @@ public class CommentController extends BaseController {
         return Optional.ofNullable(result)
                 .filter(r -> !r.hasErrors())
                 .flatMap(r -> userSession.getUser())
-                .flatMap(user -> commentService.addComment(message, postId))
+                .flatMap(user -> commentService.addComment(message, postId, user))
                 .map(comment -> ResponseEntity.ok().build())
                 .orElse(ResponseEntity.badRequest().build());
     }

@@ -1,5 +1,6 @@
 package ijmo.demo.springboard.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ijmo.demo.springboard.model.BaseEntity;
 import ijmo.demo.springboard.user.User;
 import lombok.Builder;
@@ -23,27 +24,31 @@ public class Comment extends BaseEntity {
     private Message message;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "comment")
+    @JsonIgnore
     private List<Message> messages; // history
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Post post;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "is_deleted")
+    @JsonIgnore
     private Boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     @Builder
-    private Comment(Message message, Post post) {
+    private Comment(Message message, Post post, User user) {
         createdAt = LocalDateTime.now();
         message.setComment(this);
+        message.setUser(user);
         this.message = message;
         this.post = post;
-        this.user = message.getUser();
+        this.user = user;
         getMessagesInternal().add(message);
     }
 

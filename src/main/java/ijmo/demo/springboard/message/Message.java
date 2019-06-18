@@ -1,5 +1,6 @@
 package ijmo.demo.springboard.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ijmo.demo.springboard.model.BaseEntity;
 import ijmo.demo.springboard.user.User;
 import lombok.Builder;
@@ -32,15 +33,19 @@ public class Message extends BaseEntity {
     private LocalDateTime createdAt;
 
     @Column(name = "is_deleted")
+    @JsonIgnore
     private Boolean isDeleted = false;
 
     @ManyToOne
+    @JsonIgnore
     private Post post; // parent
 
     @ManyToOne
+    @JsonIgnore
     private Comment comment; // parent
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private User user;
 
     @Builder

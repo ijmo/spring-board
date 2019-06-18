@@ -42,10 +42,11 @@ public class Post extends BaseEntity {
     private User user;
 
     @Builder
-    private Post(Message message) {
+    private Post(Message message, User user) {
         createdAt = LocalDateTime.now();
         message.setPost(this);
         message.setRevision(1);
+        message.setUser(user);
         this.message = message;
         this.user = message.getUser();
         getMessagesInternal().add(message);

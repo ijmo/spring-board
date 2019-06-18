@@ -17,8 +17,7 @@ public class PostService {
 
     @Transactional
     public Post addPost(Message message, User user) {
-        message.setUser(user);
-        Post post = Post.builder().message(message).build();
+        Post post = Post.builder().message(message).user(user).build();
         return postRepository.save(post);
     }
 
