@@ -89,6 +89,11 @@ table textarea {
   font-size: 10pt;
 }
 
+.post-toolbar, .comment-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .post-header {
   border-bottom: 2px solid darkgray;
   margin-bottom: 10px;
@@ -99,7 +104,7 @@ table textarea {
   font-size: 10pt;
 }
 
-.post-date {
+.post-datetime {
   margin-left: 20px;
 }
 
@@ -114,6 +119,22 @@ table textarea {
 
 .comments > div {
   margin: 6px 2px;
-  padding: 10px;
+  padding: 4px;
   background: #f4f4f4;
+}
+
+.comment-row-header {
+  background: #e0e0e0;
+  font-size: 10pt;
+  padding-left: 10px;
+  clear: right;
+}
+
+.comment-datetime {
+  float: right;
+  margin-right: 20px;
+}
+
+.comment-view {
+  padding-left: 6px;
 }

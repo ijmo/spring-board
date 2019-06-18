@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
 <body>
-  <div>
+  <div class="post-toolbar">
     <button type="button" th:onclick="'location.href=\'/posts/' + ${post.id} + '/edit\''">Edit</button>
     <button type="button" th:onclick="'location.href=\'/posts/' + ${post.id} + '/delete\''">Delete</button>
   </div>
@@ -10,7 +10,7 @@
       <span class="post-title" th:text="${post.message.title}"></span>
       <div>
         <span class="post-writer" th:text="${post.user.username}"></span>
-        <span class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+        <span class="post-datetime" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
       </div>
     </div>
     <div class="post-body">
@@ -25,7 +25,9 @@
   </div>
   <div class="comment-form">
     <textarea id="comment-text"></textarea>
-    <button id="post-comment-btn" type="button">Post comment</button>
+    <div class="comment-toolbar">
+      <button id="post-comment-btn" type="button">Post comment</button>
+    </div>
   </div>
 </body>
 </html>
