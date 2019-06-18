@@ -1,0 +1,92 @@
+* {
+  line-height: 2;
+}
+
+body {
+  margin: 0;
+}
+
+body > div {
+  width: 1000px;
+  display: flex;
+}
+
+button {
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 160px;
+  height: auto;
+  padding: 20px;
+  background: lightskyblue;
+}
+
+.content-container {
+  width: 800px;
+  margin-left: 200px;
+  padding: 40px;
+}
+
+.content-container > div {
+  margin-bottom: 20px;
+}
+
+body table {
+  width: 100%;
+}
+
+.login form div:nth-child(2) {
+  display: flex;
+  justify-content: center;
+}
+
+.login div {
+  width: 100%;
+}
+
+td.label-col {
+  width: 100px;
+}
+
+.btn-new-post {
+  display: flex;
+  justify-content: flex-end;
+}
+
+form label {
+  margin-right: 14px;
+}
+
+input, textarea {
+  width: 100%;
+}
+
+table textarea {
+  height: 400px;
+}
+
+.posts-table thead tr th:nth-child(1) {
+  width: 480px;
+}
+
+.posts-table thead tr th:nth-child(2), th:nth-child(3) {
+  width: 120px;
+}
+
+.post-header {
+  border-bottom: 2px solid darkgray;
+  margin-bottom: 10px;
+}
+
+.post-date {
+  width: 140px;
+  display: flex;
+  justify-content: flex-end;
+}

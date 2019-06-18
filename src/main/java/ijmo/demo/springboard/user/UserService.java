@@ -12,7 +12,7 @@ public class UserService {
 
     public User loginOrSignUp(String username) {
         return userRepository.findByUsername(username)
-                .orElse(userRepository.save(User.builder().username(username).build()));
+                .orElseGet(() -> userRepository.save(User.builder().username(username).build()));
     }
 
     public User updateUsername(User user, String username) {

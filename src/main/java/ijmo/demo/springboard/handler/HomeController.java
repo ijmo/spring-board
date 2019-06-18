@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class HomeController extends BaseController {
+
     @GetMapping("")
     public String home(@ModelAttribute UserSession userSession, Model model) {
-        userSession.getUser().ifPresent(user -> {
-            System.out.println("****** user: " + user.getUsername());
-            model.addAttribute(user);
-        });
+        userSession.getUser().ifPresent(model::addAttribute);
         return "home";
     }
 }

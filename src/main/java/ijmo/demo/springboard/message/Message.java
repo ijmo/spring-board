@@ -9,7 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -29,7 +29,7 @@ public class Message extends BaseEntity {
     private String body;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -45,6 +45,7 @@ public class Message extends BaseEntity {
 
     @Builder
     private Message(String title, String body, User user) {
+        createdAt = LocalDateTime.now();
         this.title = title;
         this.body = body;
         this.user = user;

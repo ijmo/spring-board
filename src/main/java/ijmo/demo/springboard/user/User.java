@@ -1,12 +1,10 @@
 package ijmo.demo.springboard.user;
 
 import ijmo.demo.springboard.model.BaseEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @Getter
@@ -15,7 +13,8 @@ import javax.persistence.*;
 @Table(name = "users")
 public class User extends BaseEntity {
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true, nullable = false)
+    @NotBlank
     private String username;
 
     @Builder

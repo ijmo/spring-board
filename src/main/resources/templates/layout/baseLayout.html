@@ -7,32 +7,35 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <div style="width:1000px;display:flex;">
-      <div style="width:200px;">
-        <div th:if="${user} != null">
-          <div><label>Username:</label><span th:text="${user.username}"></span></div>
-          <div><button type="button" onclick="location.href='/users/logout'">Logout</button></div>
-        </div>
-        <div th:if="${user} == null">
-          <form method="post" action="/users/login">
-            <div><input type="text" name="username" style="width:120px;" placeholder="Username"/></div>
-            <div><button type="submit">Login</button></div>
-          </form>
+    <div>
+      <div class="sidebar">
+        <div>
+          <div th:if="${user} == null" class="login">
+            <form method="post" action="/users/login">
+              <div><input type="text" name="username" placeholder="Username"/></div>
+              <div><button type="submit">Login</button></div>
+            </form>
+          </div>
+          <div th:if="${user} != null" class="login">
+            <form method="get" action="/users/logout">
+              <div><label>Username:</label><span th:text="${user.username}"></span></div>
+              <div><button type="submit">Logout</button></div>
+            </form>
+          </div>
         </div>
         <div>
           <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/posts">Posts</a></li>
-            <li><a href="/settings">Settings</a></li>
+<!--            <li><a href="/settings">Settings</a></li>-->
           </ul>
         </div>
       </div>
-      <div style="width:800px;">
-        <div>
-          <th:block th:include="${template}"/>
-        </div>
+      <div class="content-container">
+        <th:block th:include="${template}"/>
       </div>
     </div>
     <script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+    <script th:src="@{/js/script.js}"></script>
   </body>
 </html>

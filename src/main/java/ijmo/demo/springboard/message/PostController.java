@@ -23,14 +23,14 @@ public class PostController extends BaseController {
 
     @GetMapping("")
     public String showPostList(@ModelAttribute UserSession userSession, Model model) {
-        userSession.getUser().ifPresent(user -> model.addAttribute("user", user));
+        userSession.getUser().ifPresent(model::addAttribute);
         model.addAttribute("posts", postService.findAllPostsNotDeleted());
         return "post/postList";
     }
 
     @GetMapping("/{postId}")
     public String showPost(@PathVariable("postId") int postId, @ModelAttribute UserSession userSession, Model model) {
-        userSession.getUser().ifPresent(user -> model.addAttribute("user", user));
+        userSession.getUser().ifPresent(model::addAttribute);
         postService.findPostById(postId).ifPresent(model::addAttribute);
         return "post/postDetails";
     }

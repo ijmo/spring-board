@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
@@ -32,7 +33,7 @@ public class Post extends BaseEntity {
     private Integer commentCount = 0;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -42,6 +43,7 @@ public class Post extends BaseEntity {
 
     @Builder
     private Post(Message message) {
+        createdAt = LocalDateTime.now();
         message.setPost(this);
         message.setRevision(1);
         this.message = message;

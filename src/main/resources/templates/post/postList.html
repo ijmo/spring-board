@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
 <body>
-  <div th:if="${user}" style="margin: 20px 0;">
+  <div class="btn-new-post" th:if="${user}" style="margin: 20px 0;">
     <button type="button" onclick="location.href='/posts/new'">New Post</button>
   </div>
   <div>
-    <table>
+    <table class="posts-table">
       <thead>
         <tr>
           <th>Title</th>
