@@ -28,7 +28,6 @@ public class UserController extends BaseController {
     @PostMapping("/login")
     public String processLoginForm(@ModelAttribute UserSession userSession, User user) {
         userSession.setUser(userService.loginOrSignUp(user.getUsername()));
-
         return "redirect:/";
     }
 
@@ -36,8 +35,6 @@ public class UserController extends BaseController {
     @GetMapping("/logout")
     public String processLogout(@ModelAttribute UserSession userSession) {
         userSession.kickUser();
-        System.out.println("# User Logged out");
-
         return "redirect:/";
     }
 }

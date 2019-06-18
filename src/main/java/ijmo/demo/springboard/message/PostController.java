@@ -1,7 +1,6 @@
 package ijmo.demo.springboard.message;
 
 import ijmo.demo.springboard.handler.BaseController;
-import ijmo.demo.springboard.session.SessionUtils;
 import ijmo.demo.springboard.session.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +8,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/posts")
@@ -23,9 +22,7 @@ public class PostController extends BaseController {
     }
 
     @GetMapping("")
-    public String showPostList(@ModelAttribute UserSession userSession, HttpSession session, Model model, BindingResult result) {
-//        SessionUtils.getUserFrom(session).ifPresent(user -> model.addAttribute("user", user));
-        System.out.println("Somebody logged in? " + userSession.isLoggedIn());
+    public String showPostList(@ModelAttribute UserSession userSession, Model model) {
         userSession.getUser().ifPresent(user -> model.addAttribute("user", user));
         model.addAttribute("posts", postService.findAllPostsNotDeleted());
         return "post/postList";
@@ -48,7 +45,9 @@ public class PostController extends BaseController {
 
     @PostMapping("/new")
     public String processCreationForm(@Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
-        String path = userSession.getUser()
+        String path = Optional.ofNullable(result)
+                .filter(r -> !r.hasErrors())
+                .flatMap(o -> userSession.getUser())
                 .map(user -> "/posts/" + postService.addPost(message, user).getId())
                 .orElse("/posts");
         return "redirect:" + path;
@@ -70,15 +69,19 @@ public class PostController extends BaseController {
 
     @PostMapping("/{postId}/edit")
     public String processUpdatePostForm(@PathVariable("postId") int postId, @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
-        userSession.getUser().ifPresent(user ->
-                postService.findPostById(postId).ifPresent(post -> postService.updatePost(message, post)));
+        Optional.ofNullable(result)
+                .filter(r -> !r.hasErrors())
+                .flatMap(o -> userSession.getUser())
+                .ifPresent(user -> postService.findPostById(postId)
+                        .ifPresent(post -> postService.updatePost(message, post)));
         return "redirect:/posts/{postId}";
     }
 
     @GetMapping("/{postId}/delete")
     public String deletePost(@PathVariable("postId") int postId, @ModelAttribute UserSession userSession) {
-        userSession.getUser().ifPresent(user ->
-                postService.findPostById(postId).ifPresent(post -> postService.deletePost(post, user)));
+        userSession.getUser()
+                .ifPresent(user -> postService.findPostById(postId)
+                        .ifPresent(post -> postService.deletePost(post, user)));
         return "redirect:/posts";
     }
 }
