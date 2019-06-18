@@ -1,16 +1,13 @@
 package ijmo.demo.springboard.user;
 
-import ijmo.demo.springboard.session.SessionUtils;
+import ijmo.demo.springboard.handler.BaseController;
+import ijmo.demo.springboard.session.UserSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends BaseController {
 
     private final UserService userService;
 
@@ -29,16 +26,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String processLoginForm(User user, HttpSession httpSession) {
-        httpSession.setAttribute(SessionUtils.USER_SESSION_KEY, userService.loginOrSignUp(user.getUsername()));
+    public String processLoginForm(@ModelAttribute UserSession userSession, User user) {
+        userSession.setUser(userService.loginOrSignUp(user.getUsername()));
 
         return "redirect:/";
     }
 
 
     @GetMapping("/logout")
-    public String processLogout(HttpSession httpSession) {
-        SessionUtils.clear(httpSession);
+    public String processLogout(@ModelAttribute UserSession userSession) {
+        userSession.kickUser();
         System.out.println("# User Logged out");
 
         return "redirect:/";

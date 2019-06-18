@@ -1,16 +1,15 @@
 package ijmo.demo.springboard.message;
 
-import ijmo.demo.springboard.session.SessionUtils;
-import ijmo.demo.springboard.user.User;
+import ijmo.demo.springboard.handler.BaseController;
+import ijmo.demo.springboard.session.UserSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RestController
-public class CommentController {
+public class CommentController extends BaseController {
 
     private final CommentService commentService;
 
@@ -19,28 +18,29 @@ public class CommentController {
     }
 
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity showCommentList(@PathVariable("postId") long postId, HttpSession session) {
+    public ResponseEntity showCommentList(@PathVariable("postId") long postId, @ModelAttribute UserSession userSession) {
         return ResponseEntity.ok(commentService.findAllByPostId(postId));
     }
 
     @GetMapping(value={"/posts/{postId}/comments/{commentId}", "/comments/{commentId}"})
-    public ResponseEntity showComment(@PathVariable("commentId") long commentId, HttpSession session) {
-        return SessionUtils.getUserFrom(session)
-                .flatMap(user -> commentService.findById(commentId))
+    public ResponseEntity showComment(@PathVariable("commentId") long commentId, @ModelAttribute UserSession userSession) {
+        return commentService.findById(commentId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/posts/{postId}/comments/new")
-    public ResponseEntity processCreationForm(User user, @PathVariable("postId") long postId, @RequestBody @Valid Message message, BindingResult result) {
-        return commentService.addComment(message, postId)
+    public ResponseEntity processCreationForm(@PathVariable("postId") long postId, @RequestBody @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
+        return userSession.getUser()
+                .flatMap(user -> commentService.addComment(message, postId))
                 .map(comment -> ResponseEntity.ok().build())
                 .orElse(ResponseEntity.badRequest().build());
     }
 
     @PostMapping("/comments/{commentId}/edit")
-    public ResponseEntity processUpdatePostForm(User user, @PathVariable("commentId") long commentId, @RequestBody @Valid Message message, BindingResult result) {
-        return commentService.updateComment(message, commentId)
+    public ResponseEntity processUpdatePostForm(@PathVariable("commentId") long commentId, @RequestBody @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
+        return userSession.getUser()
+                .flatMap(user -> commentService.updateComment(message, commentId))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
     }
