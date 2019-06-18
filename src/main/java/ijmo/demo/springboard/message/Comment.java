@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class Comment extends BaseEntity {
     private Post post;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @Column(name = "is_deleted")
     @JsonIgnore
@@ -43,7 +43,7 @@ public class Comment extends BaseEntity {
 
     @Builder
     private Comment(Message message, Post post, User user) {
-        createdAt = LocalDateTime.now();
+        createdAt = ZonedDateTime.now();
         message.setComment(this);
         message.setUser(user);
         this.message = message;

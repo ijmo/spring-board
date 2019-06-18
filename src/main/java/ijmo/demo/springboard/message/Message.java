@@ -10,7 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -30,7 +30,7 @@ public class Message extends BaseEntity {
     private String body;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @Column(name = "is_deleted")
     @JsonIgnore
@@ -50,7 +50,7 @@ public class Message extends BaseEntity {
 
     @Builder
     private Message(String title, String body, User user) {
-        createdAt = LocalDateTime.now();
+        createdAt = ZonedDateTime.now();
         this.title = title;
         this.body = body;
         this.user = user;
