@@ -21,12 +21,8 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public List<Post> findAllPosts() {
-        return postRepository.findAll();
-    }
-
-    public List<Post> findAllPostsNotDeleted() {
-        return postRepository.findAllByIsDeleted(false);
+    public List<Post> findAllByIsDeletedOrderByCreatedAtDesc() {
+        return postRepository.findAllByIsDeletedOrderByCreatedAtDesc(false);
     }
 
     public Optional<Post> findPostById(long id) {

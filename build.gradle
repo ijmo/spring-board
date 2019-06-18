@@ -36,4 +36,5 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile 'org.webjars:jquery:3.4.1'
+    compile 'org.webjars.bower:moment:2.24.0'
 }

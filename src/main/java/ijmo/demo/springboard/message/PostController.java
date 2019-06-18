@@ -24,7 +24,7 @@ public class PostController extends BaseController {
     @GetMapping("")
     public String showPostList(@ModelAttribute UserSession userSession, Model model) {
         userSession.getUser().ifPresent(model::addAttribute);
-        model.addAttribute("posts", postService.findAllPostsNotDeleted());
+        model.addAttribute("posts", postService.findAllByIsDeletedOrderByCreatedAtDesc());
         return "post/postList";
     }
 
