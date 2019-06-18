@@ -22,4 +22,12 @@ public class User extends BaseEntity {
     private User(String username) {
         this.username = username;
     }
+
+    @Override
+    public int hashCode() {
+        if (getId() != null) {
+            return getId().hashCode();
+        }
+        return super.hashCode();
+    }
 }

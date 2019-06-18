@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
@@ -26,6 +27,9 @@ public class Comment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
+
+    @Column(name = "created_at")
+    private Date createdAt;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;

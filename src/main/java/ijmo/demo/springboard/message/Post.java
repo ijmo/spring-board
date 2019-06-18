@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
@@ -29,6 +30,9 @@ public class Post extends BaseEntity {
 
     @Column(name = "comment_count")
     private Integer commentCount = 0;
+
+    @Column(name = "created_at")
+    private Date createdAt;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
+    r<body>
+  <div>
+    <div>
+      <button type="button" th:onclick="'location.href=\'/posts/' + ${post.id} + '/edit\''">Edit</button>
+      <button type="button" th:onclick="'location.href=\'/posts/' + ${post.id} + '/delete\''">Delete</button>
+    </div>
+    <div>
+      <td th:text="${post.message.title}"/>
+    </div>
+    <div>
+      <td th:text="${post.message.body}"/>
+    </div>
+    <div>
+      <td th:text="${post.createdAt}"/>
+    </div>
+    <div class="comments">
+    </div>
+  </div>
+</body>
+</html>

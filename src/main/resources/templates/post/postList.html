@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
+<body>
+  <div th:if="${user}" style="margin: 20px 0;">
+    <button type="button" onclick="location.href='/posts/new'">New Post</button>
+  </div>
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Username</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="post : ${posts}">
+          <td th:text="${post.message.title}"/>
+          <td th:text="${post.user} ? ${post.user.username} : 'Unknown'"/>
+          <td th:text="${post.createdAt}"/>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
