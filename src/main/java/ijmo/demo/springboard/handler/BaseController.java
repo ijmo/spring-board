@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class BaseController {
 
     @ModelAttribute("userSession")
-    public UserSession getUserSession() {
+    public UserSession userSession() {
         return new UserSession();
     }
 }
