@@ -5,6 +5,7 @@ import ijmo.demo.springboard.session.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -39,8 +40,9 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/logout")
-    public String processLogout(@ModelAttribute UserSession userSession) {
+    public String processLogout(@ModelAttribute UserSession userSession, SessionStatus session) {
         userSession.kickUser();
+        session.setComplete();
         return "redirect:/";
     }
 }
