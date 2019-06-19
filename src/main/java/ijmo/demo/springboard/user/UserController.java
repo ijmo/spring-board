@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -31,7 +32,9 @@ public class UserController extends BaseController {
 
     @PostMapping("/login")
     public String processLoginForm(@ModelAttribute UserSession userSession, @Valid @NotBlank String username, BindingResult result) {
-        userSession.setUser(userService.loginOrSignUp(username));
+        Optional.ofNullable(result)
+                .filter(r -> !r.hasErrors())
+                .ifPresent(r -> userSession.setUser(userService.loginOrSignUp(username)));
         return "redirect:/";
     }
 
