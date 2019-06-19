@@ -6,4 +6,5 @@ A simple bulletin board built with Spring Boot 2.
 * Provides version control for posts and comments (in dev)
 
 
+## Screenshot
 <img src="/images/screenshot.png?raw=true">
