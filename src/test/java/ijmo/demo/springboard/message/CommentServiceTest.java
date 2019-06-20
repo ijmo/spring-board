@@ -45,7 +45,7 @@ public class CommentServiceTest extends BaseTest {
     }
 
     @Test
-    public void Comment_Add_To_Post() {
+    public void givenUserIsAuthenticated_whenAddComment_thenAppendsToRepository() {
         final Message[] MESSAGES = {
                 newMessage("Comment body 0", user),
                 newMessage("Comment body 1", user),
