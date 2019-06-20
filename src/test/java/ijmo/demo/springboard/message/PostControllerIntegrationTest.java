@@ -1,6 +1,8 @@
 package ijmo.demo.springboard.message;
 
 
+import ijmo.demo.springboard.test.BaseTest;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PostControllerIntegrationTest {
+public class PostControllerIntegrationTest extends BaseTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,5 +50,55 @@ public class PostControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(USERNAME)))
                 .andExpect(content().string(containsString("btn-new-post")));
+    }
+
+    @Test
+    public void givenUserIsAuthenticated_whenAddPost_thenNewPostShowsInList() throws Exception {
+        final Message MESSAGE1 = newMessage("Post title 1", "Post body 1");
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+                .param("title", MESSAGE1.getTitle())
+                .param("body", MESSAGE1.getBody())
+                .session(session)
+                .accept(MediaType.TEXT_HTML))
+                .andReturn();
+
+        String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
+        Assert.assertNotNull(redirectUrl);
+
+        mockMvc.perform(MockMvcRequestBuilders.get(redirectUrl)
+                .session(session)
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(MESSAGE1.getTitle())))
+                .andExpect(content().string(containsString(MESSAGE1.getBody())));
+    }
+
+    @Test
+    public void givenUserIsAuthenticated_whenUpdatePost_thenNewPostDetailShows() throws Exception {
+        final Message MESSAGE1 = newMessage("Post title 1", "Post body 1");
+        final Message MESSAGE2 = newMessage("Post title 2", "Post body 2");
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+                .param("title", MESSAGE1.getTitle())
+                .param("body", MESSAGE1.getBody())
+                .session(session)
+                .accept(MediaType.TEXT_HTML))
+                .andReturn();
+
+        String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
+        Assert.assertNotNull(redirectUrl);
+
+        mockMvc.perform(MockMvcRequestBuilders.post(redirectUrl + "/edit")
+                .param("title", MESSAGE2.getTitle())
+                .param("body", MESSAGE2.getBody())
+                .session(session)
+                .accept(MediaType.TEXT_HTML));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(redirectUrl)
+                .session(session)
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(MESSAGE2.getTitle())))
+                .andExpect(content().string(containsString(MESSAGE2.getBody())));
     }
 }
