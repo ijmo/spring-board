@@ -44,7 +44,7 @@ public class PostController extends BaseController {
     }
 
     @PostMapping("/new")
-    public String processCreationForm(@Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
+    public String processCreationForm(@ModelAttribute @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
         String path = Optional.ofNullable(result)
                 .filter(r -> !r.hasErrors())
                 .flatMap(o -> userSession.getUser())
@@ -69,7 +69,7 @@ public class PostController extends BaseController {
     }
 
     @PostMapping("/{postId}/edit")
-    public String processUpdatePostForm(@PathVariable("postId") int postId, @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
+    public String processUpdatePostForm(@PathVariable("postId") int postId, @ModelAttribute @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
         Optional.ofNullable(result)
                 .filter(r -> !r.hasErrors())
                 .flatMap(o -> userSession.getUser())
