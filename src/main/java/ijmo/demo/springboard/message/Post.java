@@ -47,7 +47,7 @@ public class Post extends BaseEntity {
         message.setRevision(1);
         message.setUser(user);
         this.message = message;
-        this.user = message.getUser();
+        this.user = user;
         getMessagesInternal().add(message);
     }
 
