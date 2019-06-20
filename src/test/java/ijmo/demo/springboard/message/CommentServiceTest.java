@@ -39,11 +39,11 @@ public class CommentServiceTest extends BaseTest {
     @Before
     public void setUp() {
         user = userRepository.save(User.builder().username("test1").build());
-        post = postService.addPost(newMessage("Post title 1", "Post body 1")).orElse(null);
+        post = postService.addPost(newMessage("Post title 1", "Post body 1"), user).orElse(null);
     }
 
     @Test
-    public void givenUserIsAuthenticated_whenAddComment_thenAppendsToRepository() {
+    public void givenUserIsAuthenticated_whenAddComment_thenAppendedToRepository() {
         final Message[] MESSAGES = {
                 newMessage("Comment body 0"),
                 newMessage("Comment body 1"),

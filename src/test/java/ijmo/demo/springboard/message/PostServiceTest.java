@@ -34,7 +34,7 @@ public class PostServiceTest extends BaseTest {
     }
 
     @Test
-    public void givenUserIsAuthenticated_whenAddPost_thenAppendsToRepository() {
+    public void givenUserIsAuthenticated_whenAddPost_thenSavedToRepository() {
         final Message MESSAGE1 = newMessage("Post title 1", "Post body 1");
         final Message MESSAGE2 = newMessage("Post title 2", "Post body 2");
 
@@ -52,7 +52,7 @@ public class PostServiceTest extends BaseTest {
     }
 
     @Test
-    public void givenUserIsAuthenticated_whenUpdatePost_thenAppendsToRepository() {
+    public void givenUserIsAuthenticated_whenUpdatePost_thenSavedToRepository() {
         final Message MESSAGE1 = newMessage("Post title 1", "Post body 1");
         final Message MESSAGE2 = newMessage("Post title 2", "Post body 2");
 
