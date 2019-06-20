@@ -48,7 +48,8 @@ public class PostController extends BaseController {
         String path = Optional.ofNullable(result)
                 .filter(r -> !r.hasErrors())
                 .flatMap(o -> userSession.getUser())
-                .map(user -> "/posts/" + postService.addPost(message, user).getId())
+                .flatMap(user -> postService.addPost(message, user))
+                .map(post -> "/posts/" + post.getId())
                 .orElse("/posts");
         return "redirect:" + path;
     }

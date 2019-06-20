@@ -15,10 +15,18 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    @Transactional
-    public Post addPost(Message message, User user) {
-        Post post = Post.builder().message(message).user(user).build();
-        return postRepository.save(post);
+    public Optional<Post> addPost(Message message) {
+        if (message.getUser() != null) {
+            Post post = Post.builder().message(message).user(message.getUser()).build();
+            return Optional.ofNullable(postRepository.save(post));
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<Post> addPost(Message message, User user) {
+        message.setUser(user);
+        return addPost(message);
     }
 
     public List<Post> findAllByIsDeletedOrderByCreatedAtDesc() {
@@ -30,13 +38,13 @@ public class PostService {
     }
 
     @Transactional
-    public Post updatePost(Message message, Post post) {
+    public Optional<Post> updatePost(Message message, Post post) {
         message.setRevision(post.getMessages().size() + 1);
         message.setPost(post);
         message.setUser(post.getUser());
         post.setMessage(message);
         post.getMessages().add(message);
-        return postRepository.save(post);
+        return Optional.ofNullable(postRepository.save(post));
     }
 
     public boolean deletePost(Post post, User user) {

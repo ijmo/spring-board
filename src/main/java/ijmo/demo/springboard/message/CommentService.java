@@ -26,10 +26,17 @@ public class CommentService {
         return commentRepository.findAllByPostId(postId);
     }
 
-    public Optional<Comment> addComment(Message message, long postId, User user) {
+    public Optional<Comment> addComment(Message message, long postId) {
         return postService.findPostById(postId).map(post ->
-            commentRepository.save(Comment.builder().message(message).post(post).user(user).build())
-        );
+                commentRepository.save(Comment.builder()
+                        .message(message)
+                        .post(post)
+                        .user(message.getUser()).build()));
+    }
+
+    public Optional<Comment> addComment(Message message, long postId, User user) {
+        message.setUser(user);
+        return addComment(message, postId);
     }
 
     @Transactional

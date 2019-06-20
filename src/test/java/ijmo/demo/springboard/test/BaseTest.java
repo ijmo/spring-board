@@ -1,4 +1,4 @@
-package ijmo.demo.springboard;
+package ijmo.demo.springboard.test;
 
 import ijmo.demo.springboard.message.Comment;
 import ijmo.demo.springboard.message.Message;
@@ -24,12 +24,11 @@ public class BaseTest {
                 .user(user).build();
     }
 
-    protected Post newPost(String title, String body, User user) {
-        return Post.builder().message(newMessage(title, body, user)).build();
+    protected Post newPost(Message message, User user) {
+        return Post.builder().message(message).user(user).build();
     }
 
-
-    protected Comment newComment(String body, Post post, User user) {
-        return Comment.builder().message(newMessage(body, user)).post(post).build();
+    protected Comment newComment(Message message, User user) {
+        return Comment.builder().message(message).user(user).build();
     }
 }
