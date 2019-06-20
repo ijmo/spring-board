@@ -11,24 +11,22 @@ public class BaseTest {
     @Rule
     public JUnitSoftAssertions softAssertions = new JUnitSoftAssertions();
 
-    protected Message newMessage(String body, User user) {
+    protected Message newMessage(String body) {
         return Message.builder()
-                .body(body)
-                .user(user).build();
+                .body(body).build();
     }
 
-    protected Message newMessage(String title, String body, User user) {
+    protected Message newMessage(String title, String body) {
         return Message.builder()
                 .title(title)
-                .body(body)
-                .user(user).build();
+                .body(body).build();
     }
 
     protected Post newPost(Message message, User user) {
         return Post.builder().message(message).user(user).build();
     }
 
-    protected Comment newComment(Message message, User user) {
+    protected Comment newComment(Message message, Post post, User user) {
         return Comment.builder().message(message).user(user).build();
     }
 }

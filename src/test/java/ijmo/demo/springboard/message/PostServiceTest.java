@@ -37,8 +37,8 @@ public class PostServiceTest extends BaseTest {
 
     @Test
     public void givenUserIsAuthenticated_whenAddPost_thenAppendsToRepository() {
-        final Message MESSAGE1 = newMessage("Post title 1", "Post body 1", user);
-        final Message MESSAGE2 = newMessage("Post title 2", "Post body 2", user);
+        final Message MESSAGE1 = newMessage("Post title 1", "Post body 1");
+        final Message MESSAGE2 = newMessage("Post title 2", "Post body 2");
 
         postService.addPost(MESSAGE1, user);
         Post found = postRepository.findAll().get(0);
@@ -55,8 +55,8 @@ public class PostServiceTest extends BaseTest {
 
     @Test
     public void givenUserIsAuthenticated_whenUpdatePost_thenAppendsToRepository() {
-        final Message MESSAGE1 = newMessage("Post title 1", "Post body 1", user);
-        final Message MESSAGE2 = newMessage("Post title 2", "Post body 2", user);
+        final Message MESSAGE1 = newMessage("Post title 1", "Post body 1");
+        final Message MESSAGE2 = newMessage("Post title 2", "Post body 2");
 
         Post original = newPost(MESSAGE1, user);
         postRepository.save(original);

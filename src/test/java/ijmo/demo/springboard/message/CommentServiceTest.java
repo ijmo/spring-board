@@ -41,20 +41,20 @@ public class CommentServiceTest extends BaseTest {
     @Before
     public void setUp() {
         user = userRepository.save(User.builder().username("test1").build());
-        post = postService.addPost(newMessage("Post title 1", "Post body 1", user)).orElse(null);
+        post = postService.addPost(newMessage("Post title 1", "Post body 1")).orElse(null);
     }
 
     @Test
     public void givenUserIsAuthenticated_whenAddComment_thenAppendsToRepository() {
         final Message[] MESSAGES = {
-                newMessage("Comment body 0", user),
-                newMessage("Comment body 1", user),
-                newMessage("Comment body 2", user),
-                newMessage("Comment body 3", user),
-                newMessage("Comment body 4", user),
+                newMessage("Comment body 0"),
+                newMessage("Comment body 1"),
+                newMessage("Comment body 2"),
+                newMessage("Comment body 3"),
+                newMessage("Comment body 4"),
         };
 
-        Arrays.asList(MESSAGES).forEach(message -> post.addComment(newComment(message, user)));
+        Arrays.asList(MESSAGES).forEach(message -> post.addComment(newComment(message, post, user)));
         postRepository.save(post); // should call save() unless you invoke Post::addComment from request
 
         softAssertions.assertThat(postService.findPostById(1).isPresent()).isTrue();
