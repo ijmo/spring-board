@@ -43,7 +43,7 @@ public class CommentServiceTest extends BaseTest {
     }
 
     @Test
-    public void addCommentTest() {
+    public void Comment_Add_To_Post() {
         final Message[] MESSAGES = {
                 newMessage("Comment body 0", user),
                 newMessage("Comment body 1", user),

@@ -34,7 +34,7 @@ public class PostServiceTest extends BaseTest {
     }
 
     @Test
-    public void postAddTest() {
+    public void Post_Add() {
         final Message MESSAGE1 = newMessage("Post title 1", "Post body 1", user);
         final Message MESSAGE2 = newMessage("Post title 2", "Post body 2", user);
 
@@ -52,7 +52,7 @@ public class PostServiceTest extends BaseTest {
     }
 
     @Test
-    public void postUpdateTest() {
+    public void Post_Update() {
         final Message MESSAGE1 = newMessage("Post title 1", "Post body 1", user);
         final Message MESSAGE2 = newMessage("Post title 2", "Post body 2", user);
 

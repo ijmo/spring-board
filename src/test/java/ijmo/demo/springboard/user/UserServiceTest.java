@@ -22,7 +22,7 @@ public class UserServiceTest extends BaseTest {
     private UserService userService;
 
     @Test
-    public void addUserTest() {
+    public void User_Add() {
         final String USERNAME1 = "test1";
 
         userService.loginOrSignUp(USERNAME1);
