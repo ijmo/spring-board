@@ -37,16 +37,16 @@ public class CommentController extends BaseController {
                 .flatMap(r -> userSession.getUser())
                 .flatMap(user -> commentService.addComment(message, postId, user))
                 .map(comment -> ResponseEntity.ok().build())
-                .orElse(ResponseEntity.badRequest().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @PostMapping("/comments/{commentId}/edit")
-    public ResponseEntity processUpdatePostForm(@PathVariable("commentId") long commentId, @RequestBody @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
+    public ResponseEntity processUpdateCommentForm(@PathVariable("commentId") long commentId, @RequestBody @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
         return Optional.ofNullable(result)
                 .filter(r -> !r.hasErrors())
                 .flatMap(r -> userSession.getUser())
                 .flatMap(user -> commentService.updateComment(message, commentId))
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.badRequest().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }
