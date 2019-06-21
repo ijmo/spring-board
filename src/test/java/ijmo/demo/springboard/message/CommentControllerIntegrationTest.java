@@ -119,7 +119,7 @@ public class CommentControllerIntegrationTest extends BaseTest {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        Map<String, String> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         data.put("body", COMMENT_MESSAGES[0].getBody());
         mockMvc.perform(MockMvcRequestBuilders.post("/posts/" + post.getId() + "/comments/new")
                 .content(mapper.writeValueAsString(data))
