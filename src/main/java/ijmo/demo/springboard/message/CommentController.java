@@ -23,12 +23,12 @@ public class CommentController extends BaseController {
         return ResponseEntity.ok(commentService.findAllByPostId(postId));
     }
 
-    @GetMapping(value={"/posts/{postId}/comments/{commentId}", "/comments/{commentId}"})
-    public ResponseEntity showComment(@PathVariable("commentId") long commentId) {
-        return commentService.findById(commentId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+//    @GetMapping(value={"/posts/{postId}/comments/{commentId}", "/comments/{commentId}"})
+//    public ResponseEntity showComment(@PathVariable("commentId") long commentId) {
+//        return commentService.findById(commentId)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
 
     @PostMapping("/posts/{postId}/comments/new")
     public ResponseEntity processCreationForm(@PathVariable("postId") long postId, @RequestBody @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) {
