@@ -52,13 +52,13 @@ public class PostServiceTest extends BaseTest {
     }
 
     @Test
-    public void givenUserIsAuthenticated_whenUpdatePost_thenSavedToRepository() {
+    public void givenUserIsAuthenticated_whenUpdatePost_thenSavedToRepository() throws Exception {
         final Message MESSAGE1 = newMessage("Post title 1", "Post body 1");
         final Message MESSAGE2 = newMessage("Post title 2", "Post body 2");
 
         Post original = newPost(MESSAGE1, user);
         postRepository.save(original);
-        postService.updatePost(MESSAGE2, original);
+        postService.updatePost(MESSAGE2, original, user);
 
         Post found = postRepository.findAll().get(0);
         softAssertions.assertThat(found.getMessage().getTitle())
