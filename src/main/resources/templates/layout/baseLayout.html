@@ -6,7 +6,7 @@
     <title>Welcome to Spring Board Demo</title>
     <link rel="stylesheet" href="/css/style.css" />
   </head>
-  <body>
+  <body th:with="userSession=${session.userSession}, user=${userSession != null && userSession.isLoggedIn()}? ${userSession.user.get()} : null">
     <div>
       <div class="sidebar">
         <div>
