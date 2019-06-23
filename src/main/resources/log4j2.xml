@@ -11,10 +11,10 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="ijmo.demo.springboard" level="trace" additivity="false">
+        <Logger name="ijmo.demo.springboard" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
         </Logger>
-        <Root level="trace">
+        <Root level="info">
             <AppenderRef ref="ConsoleAppender" />
         </Root>
     </Loggers>
