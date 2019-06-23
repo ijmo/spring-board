@@ -1,9 +1,14 @@
 package ijmo.demo.springboard.user;
 
 import ijmo.demo.springboard.model.BaseEntity;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor

@@ -1,6 +1,5 @@
 package ijmo.demo.springboard.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 
 import javax.persistence.GeneratedValue;
