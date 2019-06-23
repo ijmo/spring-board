@@ -13,6 +13,7 @@ spring:
       hibernate:
         format_sql: true
     database-platform: org:hibernate:dialect:H2Dialect
+#    open-in-view: true
   devtools:
     livereload:
       enabled: true
@@ -23,9 +24,7 @@ spring:
     cache: false
 logging:
   level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
----
+    root: trace
+    ijmo:
+      demo:
+        springboard: trace
