@@ -2,6 +2,9 @@ package ijmo.demo.springboard.message;
 
 import ijmo.demo.springboard.UnauthorizedException;
 import ijmo.demo.springboard.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,27 +14,16 @@ import java.util.Optional;
 
 @Service
 public class PostService {
+    private static final Logger log = LoggerFactory.getLogger(PostService.class);
     private PostRepository postRepository;
 
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 
-    public Optional<Post> addPost(Message message) {
-        if (message.getUser() != null) {
-            Post post = Post.builder().message(message).user(message.getUser()).build();
-            return Optional.ofNullable(postRepository.save(post));
-        }
-        return Optional.empty();
-    }
-
-    public Optional<Post> addPost(Message message, User user) {
-        message.setUser(user);
-        return addPost(message);
-    }
-
     @Cacheable("posts")
     public List<Post> findAll() {
+        log.debug("findAll()");
         return postRepository.findAllByIsDeletedOrderByCreatedOnDesc(false);
     }
 
@@ -39,7 +31,22 @@ public class PostService {
         return postRepository.findByIdAndIsDeleted(id, false);
     }
 
+    private Optional<Post> addPost(Message message) {
+        if (message.getUser() != null) {
+            Post post = Post.builder().message(message).user(message.getUser()).build();
+            return Optional.ofNullable(postRepository.save(post));
+        }
+        return Optional.empty();
+    }
+
+    @CacheEvict(value = "posts", allEntries = true)
+    public Optional<Post> addPost(Message message, User user) {
+        message.setUser(user);
+        return addPost(message);
+    }
+
     @Transactional
+    @CacheEvict(value = "posts", allEntries = true)
     public Optional<Post> updatePost(Message message, Post post, User user) throws UnauthorizedException {
         if (!isAuthor(post, user)) {
             throw new UnauthorizedException();
@@ -52,6 +59,7 @@ public class PostService {
         return Optional.ofNullable(postRepository.save(post));
     }
 
+    @CacheEvict(value = "posts", allEntries = true)
     public boolean deletePost(Post post, User user) throws UnauthorizedException {
         if (!isAuthor(post, user)) {
             throw new UnauthorizedException();
