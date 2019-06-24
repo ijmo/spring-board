@@ -22,9 +22,3 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     cache: false
-logging:
-  level:
-    root: trace
-    ijmo:
-      demo:
-        springboard: trace
