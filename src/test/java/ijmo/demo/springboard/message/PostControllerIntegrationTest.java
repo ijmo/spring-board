@@ -133,4 +133,60 @@ public class PostControllerIntegrationTest extends BaseTest {
                 .andExpect(content().string(not(containsString(MESSAGE.getBody()))))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void whenAddPost_thenUnauthorized() throws Exception {
+        final Message MESSAGE = newMessage("Post Title", "Post Body");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+                .param("title", MESSAGE.getTitle())
+                .param("body", MESSAGE.getBody())
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void whenUpdatePost_thenUnauthorized() throws Exception {
+        final Message MESSAGE1 = newMessage("Post Title 1", "Post Body 1");
+        final Message MESSAGE2 = newMessage("Post Title 2", "Post Body 2");
+
+        login();
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+                .param("title", MESSAGE1.getTitle())
+                .param("body", MESSAGE1.getBody())
+                .session(session)
+                .accept(MediaType.TEXT_HTML))
+                .andReturn();
+
+        String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
+        Assert.assertNotNull(redirectUrl);
+
+        mockMvc.perform(MockMvcRequestBuilders.post(redirectUrl + "/edit")
+                .param("title", MESSAGE2.getTitle())
+                .param("body", MESSAGE2.getBody())
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void whenDeletePost_thenUnauthorized() throws Exception {
+        final Message MESSAGE = newMessage("Post Title", "Post Body");
+
+        login();
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+                .param("title", MESSAGE.getTitle())
+                .param("body", MESSAGE.getBody())
+                .session(session)
+                .accept(MediaType.TEXT_HTML))
+                .andReturn();
+
+        String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
+        Assert.assertNotNull(redirectUrl);
+
+        mockMvc.perform(MockMvcRequestBuilders.post(redirectUrl + "/delete")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isUnauthorized());
+    }
 }
