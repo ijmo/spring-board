@@ -3,7 +3,7 @@
 <body>
   <div class="post-toolbar">
     <button type="button" th:onclick="'location.href=\'/posts/' + ${post.id} + '/edit\''">Edit</button>
-    <button type="button" th:onclick="'location.href=\'/posts/' + ${post.id} + '/delete\''">Delete</button>
+    <form method="post" th:action="'/posts/' + ${post.id} + '/delete'"><button type="submit">Delete</button></form>
   </div>
   <div class="post-view">
     <div class="post-header">
