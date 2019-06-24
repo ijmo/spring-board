@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring_board?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&autoReconnection=true&characterEncoding=UTF-8
+    username: root
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: true
+    generate-ddl: true
+    show-sql: true
