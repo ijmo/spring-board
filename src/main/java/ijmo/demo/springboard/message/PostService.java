@@ -21,7 +21,6 @@ public class PostService {
             Post post = Post.builder().message(message).user(message.getUser()).build();
             return Optional.ofNullable(postRepository.save(post));
         }
-
         return Optional.empty();
     }
 
