@@ -28,7 +28,7 @@ public class CommentService {
         return commentRepository.findAllByPostIdAndIsDeleted(postId, false);
     }
 
-    public Optional<Comment> addComment(Message message, long postId) {
+    private Optional<Comment> addComment(Message message, long postId) {
         return postService.findPostById(postId).map(post ->
                 commentRepository.save(Comment.builder()
                         .message(message)
