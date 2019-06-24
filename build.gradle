@@ -39,7 +39,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
     compile 'javax.cache:cache-api'
-    compile 'org.ehcache:ehcache'
+    compile 'org.hibernate:hibernate-ehcache'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile 'org.webjars:jquery:3.4.1'
