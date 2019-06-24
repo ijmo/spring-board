@@ -18,7 +18,7 @@
           <tr th:onclick="'location.href=\'/posts/' + ${post.id} + '\''">
             <td th:text="${post.message.title}"/>
             <td th:text="${post.user} ? ${post.user.username} : 'Unknown'"/>
-            <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"/>
+            <td th:text="${#temporals.format(post.createdOn, 'yyyy-MM-dd HH:mm')}"/>
           </tr>
         </th:block>
       </tbody>

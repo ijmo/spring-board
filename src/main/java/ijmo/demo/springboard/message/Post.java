@@ -31,8 +31,8 @@ public class Post extends BaseEntity {
     @Column(name = "comment_count")
     private Integer commentCount = 0;
 
-    @Column(name = "created_at")
-    private ZonedDateTime createdAt;
+    @Column(name = "created_on")
+    private ZonedDateTime createdOn;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -42,7 +42,7 @@ public class Post extends BaseEntity {
 
     @Builder
     private Post(Message message, User user) {
-        createdAt = ZonedDateTime.now();
+        createdOn = ZonedDateTime.now();
         message.setPost(this);
         message.setRevision(1);
         message.setUser(user);

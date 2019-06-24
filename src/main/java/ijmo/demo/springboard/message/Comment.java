@@ -31,8 +31,8 @@ public class Comment extends BaseEntity {
     @JsonIgnore
     private Post post;
 
-    @Column(name = "created_at")
-    private ZonedDateTime createdAt;
+    @Column(name = "created_on")
+    private ZonedDateTime createdOn;
 
     @Column(name = "is_deleted")
     @JsonIgnore
@@ -43,7 +43,7 @@ public class Comment extends BaseEntity {
 
     @Builder
     private Comment(Message message, Post post, User user) {
-        createdAt = ZonedDateTime.now();
+        createdOn = ZonedDateTime.now();
         message.setComment(this);
         message.setUser(user);
         this.message = message;

@@ -31,7 +31,7 @@ public class PostService {
     }
 
     public List<Post> findAll() {
-        return postRepository.findAllByIsDeletedOrderByCreatedAtDesc(false);
+        return postRepository.findAllByIsDeletedOrderByCreatedOnDesc(false);
     }
 
     public Optional<Post> findPostById(long id) {

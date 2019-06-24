@@ -10,7 +10,7 @@
       <span class="post-title" th:text="${post.message.title}"></span>
       <div>
         <span class="post-writer" th:text="${post.user.username}"></span>
-        <span class="post-datetime" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+        <span class="post-datetime" th:text="${#temporals.format(post.createdOn, 'yyyy-MM-dd HH:mm')}"></span>
       </div>
     </div>
     <div class="post-body">

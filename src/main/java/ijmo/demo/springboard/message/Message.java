@@ -29,8 +29,8 @@ public class Message extends BaseEntity {
     @NotEmpty
     private String body;
 
-    @Column(name = "created_at")
-    private ZonedDateTime createdAt;
+    @Column(name = "created_on")
+    private ZonedDateTime createdOn;
 
     @Column(name = "is_deleted")
     @JsonIgnore
@@ -50,7 +50,7 @@ public class Message extends BaseEntity {
 
     @Builder
     private Message(String title, String body, User user) {
-        createdAt = ZonedDateTime.now();
+        createdOn = ZonedDateTime.now();
         this.title = title;
         this.body = body;
         this.user = user;

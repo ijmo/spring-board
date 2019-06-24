@@ -7,7 +7,7 @@ function refreshComments(arr) {
                 .append(
                     $("<div class='comment-row-header'></div>")
                         .append($("<span class='comment-username'></span>").text(row.user.username))
-                        .append($("<span class='comment-datetime'></span>").text(moment(row.createdAt).format("YYYY-MM-DD HH:mm"))))
+                        .append($("<span class='comment-datetime'></span>").text(moment(row.createdOn).format("YYYY-MM-DD HH:mm"))))
                 .append($("<div class='comment-view'></div>").append($("<span></span>").text(row.message.body))));
     });
 }
