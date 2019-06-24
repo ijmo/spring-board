@@ -6,7 +6,6 @@ import ijmo.demo.springboard.message.Post;
 import ijmo.demo.springboard.user.User;
 import org.assertj.core.api.JUnitSoftAssertions;
 import org.junit.Rule;
-import org.springframework.test.context.TestPropertySource;
 
 public class BaseTest {
     @Rule
