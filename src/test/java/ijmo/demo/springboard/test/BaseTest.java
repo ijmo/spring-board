@@ -6,7 +6,9 @@ import ijmo.demo.springboard.message.Post;
 import ijmo.demo.springboard.user.User;
 import org.assertj.core.api.JUnitSoftAssertions;
 import org.junit.Rule;
+import org.springframework.test.context.TestPropertySource;
 
+@TestPropertySource(properties={"spring.cache.type=none"})
 public class BaseTest {
     @Rule
     public JUnitSoftAssertions softAssertions = new JUnitSoftAssertions();

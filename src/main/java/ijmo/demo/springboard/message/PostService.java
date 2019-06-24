@@ -2,6 +2,7 @@ package ijmo.demo.springboard.message;
 
 import ijmo.demo.springboard.UnauthorizedException;
 import ijmo.demo.springboard.user.User;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class PostService {
         return addPost(message);
     }
 
+    @Cacheable("posts")
     public List<Post> findAll() {
         return postRepository.findAllByIsDeletedOrderByCreatedOnDesc(false);
     }
