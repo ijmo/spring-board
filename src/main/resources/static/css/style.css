@@ -15,126 +15,44 @@ button {
   width: 100px;
   height: 40px;
   border-radius: 10px;
+  font-size: 0.75rem;
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 160px;
-  height: auto;
-  padding: 20px;
-  background: lightskyblue;
+.navbar {
+  width: 200px;
+  height: 100vh;
+  align-items: start;
 }
 
 .content-container {
   width: 800px;
-  margin-left: 200px;
   padding: 40px;
 }
 
-.content-container > div {
-  margin-bottom: 20px;
-}
-
-body table {
-  width: 100%;
-}
-
-.login form div:nth-child(2) {
-  display: flex;
-  justify-content: center;
-}
-
-.login div {
-  width: 100%;
-}
-
-td.label-col {
-  width: 100px;
-}
-
-.btn-new-post {
-  display: flex;
-  justify-content: flex-end;
-}
-
-form label {
-  margin-right: 14px;
-}
-
-input, textarea {
-  width: 100%;
-}
-
-table textarea {
-  height: 400px;
-}
-
-.posts-table thead tr th:nth-child(1) {
-  width: 480px;
-}
-
-.posts-table thead tr th:nth-child(2), th:nth-child(3) {
-  width: 120px;
-}
-
-.posts-table tbody tr:hover {
-  background: #f4f4f4;
+#posts tbody tr:hover {
   cursor: pointer;
 }
 
-.posts-table tbody tr td:nth-child(2), td:nth-child(3) {
-  font-size: 10pt;
+#form-post textarea.form-control {
+  height: 400px;
 }
 
-.post-toolbar, .comment-toolbar {
-  display: flex;
-  justify-content: flex-end;
+#form-comment textarea.form-control {
+  height: 100px;
 }
 
-.post-header {
-  border-bottom: 2px solid darkgray;
-  margin-bottom: 10px;
+.date {
+  font-size: 0.66rem;
 }
 
-.post-header > :nth-child(2) {
-  float: right;
-  font-size: 10pt;
+#comments-header span {
+  font-size: 0.75rem;
 }
 
-.post-datetime {
-  margin-left: 20px;
+.comment-item {
+  background: #eaeaea;
 }
 
-.comments-header {
-  border-bottom: 1px solid lightgray;
-  font-size: 10pt;
-}
-
-.post-comments {
-  padding: 4px;
-}
-
-.comments > div {
-  margin: 6px 2px;
-  padding: 4px;
-  background: #f4f4f4;
-}
-
-.comment-row-header {
-  background: #e0e0e0;
-  font-size: 10pt;
-  padding-left: 10px;
-  clear: right;
-}
-
-.comment-datetime {
-  float: right;
-  margin-right: 20px;
-}
-
-.comment-view {
-  padding-left: 6px;
+.comment-header {
+  background: #c0c0c0;
 }

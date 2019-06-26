@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
 <body>
-  <div class="btn-new-post" th:if="${user}" style="margin: 20px 0;">
-    <button type="button" onclick="location.href='/posts/new'">New Post</button>
+  <div class="text-right" th:if="${user}" style="margin: 20px 0;">
+    <button type="button" class="btn-primary" onclick="location.href='/posts/new'">New Post</button>
   </div>
   <div>
-    <table class="posts-table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Username</th>
-          <th>Date</th>
+    <table id="posts" class="table table-hover table-sm">
+      <thead class="thead-light">
+        <tr class="d-flex text-center">
+          <th class="col-7">Title</th>
+          <th class="col-2">Username</th>
+          <th class="col-3">Date</th>
         </tr>
       </thead>
       <tbody>
         <th:block th:each="post : ${posts}">
-          <tr th:onclick="'location.href=\'/posts/' + ${post.id} + '\''">
-            <td th:text="${post.message.title}"/>
-            <td th:text="${post.user} ? ${post.user.username} : 'Unknown'"/>
-            <td th:text="${#temporals.format(post.createdOn, 'yyyy-MM-dd HH:mm')}"/>
+          <tr class="d-flex align-items-center" th:data-href="'/posts/' + ${post.id}">
+            <td class="col-7"><span th:text="${post.message.title}"></span></td>
+            <td class="col-2 text-center"><span th:text="${post.user} ? ${post.user.username} : 'Unknown'"></span></td>
+            <td class="col-3 text-center"><span class="date"  th:text="${#temporals.format(post.createdOn, 'yyyy-MM-dd HH:mm')}"></span></td>
           </tr>
         </th:block>
       </tbody>

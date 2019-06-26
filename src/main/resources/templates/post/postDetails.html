@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
 <body>
-  <div class="post-toolbar">
-    <button type="button" th:onclick="'location.href=\'/posts/' + ${post.id} + '/edit\''">Edit</button>
-    <form method="post" th:action="'/posts/' + ${post.id} + '/delete'"><button type="submit">Delete</button></form>
-  </div>
-  <div class="post-view">
-    <div class="post-header">
-      <span class="post-title" th:text="${post.message.title}"></span>
-      <div>
-        <span class="post-writer" th:text="${post.user.username}"></span>
-        <span class="post-datetime" th:text="${#temporals.format(post.createdOn, 'yyyy-MM-dd HH:mm')}"></span>
+  <th:block th:object="${post}">
+    <div class="d-flex justify-content-end">
+      <div class="px-2"><button type="button" th:onclick="'location.href=\'/posts/' + *{id} + '/edit\''">Edit</button></div>
+      <div class="px-2"><form method="post" th:action="'/posts/' + *{id} + '/delete'"><button type="submit">Delete</button></form></div>
+    </div>
+    <div class="my-3 p-2 border rounded-lg">
+      <div class="d-flex py-2 border-bottom">
+        <div class="mr-auto"><span th:text="*{message?.title}"></span></div>
+        <div class="border-left px-lg-4"><span th:text="*{user?.username}"></span></div>
+        <div><span class="date" th:text="*{#temporals.format(createdOn, 'yyyy-MM-dd HH:mm')}"></span></div>
+      </div>
+      <div class="d-flex py-lg-4">
+        <span class="post-text" th:text="*{message?.body}"></span>
       </div>
     </div>
-    <div class="post-body">
-      <span class="post-text" th:text="${post.message.body}"></span>
-    </div>
-  </div>
-  <div class="post-comments">
-    <div class="comments-header">
+    <div id="comments-header">
       <span>Comments</span>
     </div>
-    <div class="comments"></div>
-  </div>
-  <div class="comment-form">
-    <textarea id="comment-text"></textarea>
-    <div class="comment-toolbar">
-      <button id="post-comment-btn" type="button">Post comment</button>
+    <div id="comments"></div>
+    <div class="d-flex">
+      <form class="w-100" id="form-comment">
+        <div class="form-group">
+          <textarea class="form-control" id="body" name="body" placeholder="Write a comment..." ></textarea>
+        </div>
+        <div class="text-right">
+        <button type="submit">Post</button>
+        </div>
+      </form>
     </div>
-  </div>
+  </th:block>
 </body>
 </html>
