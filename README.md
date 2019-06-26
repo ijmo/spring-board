@@ -7,4 +7,5 @@ A simple bulletin board built with Spring Boot 2.
 
 
 ## Screenshot
-<img src="/images/screenshot.png?raw=true">
+<img src="/images/screenshot1.png?raw=true">
+<img src="/images/screenshot3.png?raw=true">
