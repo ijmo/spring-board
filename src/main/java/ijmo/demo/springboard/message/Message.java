@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
 
 @NoArgsConstructor
@@ -25,8 +25,9 @@ public class Message extends BaseEntity {
     @Column(name = "title")
     private String title;
 
+    @Lob
     @Column(name = "body")
-    @NotEmpty
+    @NotBlank(message = "body is mandatory")
     private String body;
 
     @Column(name = "created_on")

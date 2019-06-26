@@ -8,10 +8,12 @@ import ijmo.demo.springboard.handler.BaseController;
 import ijmo.demo.springboard.session.UserSession;
 import ijmo.demo.springboard.user.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 @RestController
@@ -21,6 +23,11 @@ public class CommentController extends BaseController {
 
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
+    }
+
+    @InitBinder("message")
+    public void initMessageBinder(WebDataBinder dataBinder) {
+        dataBinder.setValidator(new MessageValidator(false));
     }
 
     @GetMapping("/posts/{postId}/comments")
@@ -36,9 +43,9 @@ public class CommentController extends BaseController {
 //    }
 
     @PostMapping("/posts/{postId}/comments/new")
-    public ResponseEntity processCreationForm(@PathVariable("postId") long postId, @RequestBody @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) throws Exception {
+    public ResponseEntity processCreation(@PathVariable("postId") long postId, @ModelAttribute UserSession userSession, @Valid @RequestBody Message message, BindingResult result) throws Exception {
         if (result.hasErrors()) {
-            throw new CannotCreateException();
+            throw new BindException(result);
         }
         User user = userSession.getUser().orElseThrow(UnauthenticatedException::new);
         return commentService.addComment(message, postId, user)
@@ -47,9 +54,9 @@ public class CommentController extends BaseController {
     }
 
     @PostMapping("/comments/{commentId}/edit")
-    public ResponseEntity processUpdateCommentForm(@PathVariable("commentId") long commentId, @RequestBody @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) throws Exception {
+    public ResponseEntity processUpdate(@PathVariable("commentId") long commentId, @ModelAttribute UserSession userSession, @Valid @RequestBody Message message, BindingResult result) throws Exception {
         if (result.hasErrors()) {
-            throw new CannotCreateException();
+            throw new BindException(result);
         }
         User user = userSession.getUser().orElseThrow(UnauthenticatedException::new);
         return commentService.updateComment(message, commentId, user)
@@ -60,8 +67,7 @@ public class CommentController extends BaseController {
     @PostMapping("/comments/{commentId}/delete")
     public ResponseEntity processDeletion(@PathVariable("commentId") long commentId, @ModelAttribute UserSession userSession) throws Exception {
         User user = userSession.getUser().orElseThrow(UnauthenticatedException::new);
-        Comment comment = commentService.findById(commentId).orElseThrow(EntityNotFoundException::new);
-        boolean result = commentService.deleteComment(comment, user);
+        boolean result = commentService.deleteCommentById(commentId, user);
         if (result) {
             return ResponseEntity.ok().build();
         }

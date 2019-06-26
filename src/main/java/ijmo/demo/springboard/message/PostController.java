@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,11 +23,16 @@ import javax.validation.Valid;
 public class PostController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(PostController.class);
 
-    private static final String VIEW_POST_CREATE_OR_UPDATE_POST_FORM = "post/createOrUpdatePostForm";
+    private static final String VIEW_CREATE_OR_UPDATE_POST_FORM = "post/createOrUpdatePostForm";
     private final PostService postService;
 
     public PostController(PostService postService) {
         this.postService = postService;
+    }
+
+    @InitBinder("message")
+    public void initMessageBinder(WebDataBinder dataBinder) {
+        dataBinder.setValidator(new MessageValidator(true));
     }
 
     @GetMapping("")
@@ -45,15 +50,17 @@ public class PostController extends BaseController {
     }
 
     @GetMapping("/new")
-    public String initCreationForm(@ModelAttribute UserSession userSession) throws Exception {
+    public String initCreationForm(@ModelAttribute UserSession userSession, Model model) throws Exception {
         userSession.getUser().orElseThrow(UnauthenticatedException::new);
-        return "post/createOrUpdatePostForm";
+        model.addAttribute(new Message());
+        return VIEW_CREATE_OR_UPDATE_POST_FORM;
     }
 
     @PostMapping("/new")
-    public String processCreationForm(@ModelAttribute @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) throws Exception {
+    public String processCreationForm(@ModelAttribute UserSession userSession, @Valid @ModelAttribute Message message, BindingResult result, Model model) throws Exception {
         if (result.hasErrors()) {
-            return VIEW_POST_CREATE_OR_UPDATE_POST_FORM;
+            model.addAttribute(message);
+            return VIEW_CREATE_OR_UPDATE_POST_FORM;
         }
         User user = userSession.getUser().orElseThrow(UnauthenticatedException::new);
         return postService.addPost(message, user)
@@ -62,16 +69,19 @@ public class PostController extends BaseController {
     }
 
     @GetMapping("/{postId}/edit")
-    public String initUpdatePostForm(@PathVariable("postId") int postId, @ModelAttribute UserSession userSession, ModelMap model) throws Exception {
+    public String initUpdatePostForm(@PathVariable("postId") int postId, @ModelAttribute UserSession userSession, Model model) throws Exception {
         userSession.getUser().orElseThrow(UnauthenticatedException::new);
-        postService.findPostById(postId).map(model::addAttribute).orElseThrow(EntityNotFoundException::new);
+        postService.findPostById(postId)
+                .map(post -> model.addAttribute(post.getMessage()))
+                .orElseThrow(EntityNotFoundException::new);
         return "post/createOrUpdatePostForm";
     }
 
     @PostMapping("/{postId}/edit")
-    public String processUpdatePostForm(@PathVariable("postId") int postId, @ModelAttribute @Valid Message message, @ModelAttribute UserSession userSession, BindingResult result) throws Exception {
+    public String processUpdatePostForm(@PathVariable("postId") int postId, @ModelAttribute UserSession userSession, @Valid @ModelAttribute Message message, BindingResult result, Model model) throws Exception {
         if (result.hasErrors()) {
-            return VIEW_POST_CREATE_OR_UPDATE_POST_FORM;
+            model.addAttribute(message);
+            return VIEW_CREATE_OR_UPDATE_POST_FORM;
         }
         User user = userSession.getUser().orElseThrow(UnauthenticatedException::new);
         Post post = postService.findPostById(postId).orElseThrow(EntityNotFoundException::new);

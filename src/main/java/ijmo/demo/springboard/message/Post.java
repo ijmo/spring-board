@@ -1,5 +1,6 @@
 package ijmo.demo.springboard.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ijmo.demo.springboard.model.BaseEntity;
 import ijmo.demo.springboard.user.User;
 import lombok.Builder;
@@ -23,9 +24,11 @@ public class Post extends BaseEntity {
     private Message message;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
+    @JsonIgnore
     private List<Message> messages; // history
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
+    @JsonIgnore
     private List<Comment> comments;
 
     @Column(name = "comment_count")
@@ -35,6 +38,7 @@ public class Post extends BaseEntity {
     private ZonedDateTime createdOn;
 
     @Column(name = "is_deleted")
+    @JsonIgnore
     private Boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.EAGER)

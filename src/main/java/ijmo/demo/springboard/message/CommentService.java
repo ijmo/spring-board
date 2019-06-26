@@ -55,7 +55,8 @@ public class CommentService {
         return Optional.ofNullable(commentRepository.save(comment));
     }
 
-    public boolean deleteComment(Comment comment, User user) throws UnauthorizedException {
+    public boolean deleteCommentById(long commentId, User user) throws Exception {
+        Comment comment = findById(commentId).orElseThrow(EntityNotFoundException::new);
         if (!isAuthor(comment, user)) {
             throw new UnauthorizedException();
         }
