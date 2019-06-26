@@ -27,6 +27,13 @@ configurations.all {
     exclude group:'org.springframework.boot', module: 'spring-boot-starter-logging'
 }
 
+ext {
+    webjarsLocatorVersion = "0.36"
+    jqueryVersion = "3.4.1"
+    bootstrapVersion = "4.3.1"
+    momentVersion = "2.24.0"
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
@@ -42,6 +49,8 @@ dependencies {
     compile 'org.hibernate:hibernate-ehcache'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compile 'org.webjars:jquery:3.4.1'
-    compile 'org.webjars.bower:moment:2.24.0'
+    compile "org.webjars:webjars-locator:$webjarsLocatorVersion"
+    compile "org.webjars:jquery:$jqueryVersion"
+    compile "org.webjars:bootstrap:$bootstrapVersion"
+    compile "org.webjars.bower:moment:$momentVersion"
 }
