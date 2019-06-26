@@ -48,7 +48,7 @@ public class PostControllerIntegrationTest extends BaseTest {
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(USERNAME)))
-                .andExpect(content().string(containsString("btn-new-post")));
+                .andExpect(content().string(containsString("New Post")));
     }
 
     @Test
