@@ -34,6 +34,9 @@ public class Comment extends BaseEntity {
     @Column(name = "created_on")
     private ZonedDateTime createdOn;
 
+    @Column(name = "modified_on")
+    private ZonedDateTime modifiedOn;
+
     @Column(name = "is_deleted")
     @JsonIgnore
     private Boolean isDeleted = false;
@@ -43,7 +46,6 @@ public class Comment extends BaseEntity {
 
     @Builder
     private Comment(Message message, Post post, User user) {
-        createdOn = ZonedDateTime.now();
         message.setComment(this);
         message.setUser(user);
         this.message = message;
@@ -57,5 +59,9 @@ public class Comment extends BaseEntity {
             messages = new ArrayList<>();
         }
         return messages;
+    }
+
+    public boolean isWrittenBy(User user) {
+        return user.getId().equals(getUser().getId());
     }
 }

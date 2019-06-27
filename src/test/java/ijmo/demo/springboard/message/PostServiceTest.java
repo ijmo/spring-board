@@ -57,7 +57,7 @@ public class PostServiceTest extends BaseTest {
 
         Post original = newPost(MESSAGE1, user);
         postRepository.save(original);
-        postService.updatePost(MESSAGE2, original, user);
+        postService.updatePost(MESSAGE2, original.getId(), user);
 
         Post found = postRepository.findAll().get(0);
         softAssertions.assertThat(found.getMessage().getTitle())

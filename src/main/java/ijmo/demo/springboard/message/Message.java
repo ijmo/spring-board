@@ -51,7 +51,6 @@ public class Message extends BaseEntity {
 
     @Builder
     private Message(String title, String body, User user) {
-        createdOn = ZonedDateTime.now();
         this.title = title;
         this.body = body;
         this.user = user;
