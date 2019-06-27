@@ -21,7 +21,7 @@ public class CommentService {
         this.postService = postService;
     }
 
-    public Optional<Comment> findById(long commentId) {
+    private Optional<Comment> findById(long commentId) {
         return commentRepository.findById(commentId);
     }
 
