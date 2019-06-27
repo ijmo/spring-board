@@ -51,6 +51,7 @@ public class Comment extends BaseEntity {
         this.message = message;
         this.post = post;
         this.user = user;
+        this.createdOn = message.getCreatedOn();
         getMessagesInternal().add(message);
     }
 
