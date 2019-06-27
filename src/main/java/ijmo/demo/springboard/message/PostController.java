@@ -84,19 +84,15 @@ public class PostController extends BaseController {
             return VIEW_CREATE_OR_UPDATE_POST_FORM;
         }
         User user = userSession.getUser().orElseThrow(UnauthenticatedException::new);
-        Post post = postService.findPostById(postId).orElseThrow(EntityNotFoundException::new);
-        int oldPostRevision = post.getMessage().getRevision();
-        return postService.updatePost(message, post, user)
-                .filter(p -> p.getMessage().getRevision() > oldPostRevision)
-                .map(p -> "redirect:/posts/{postId}")
+        return postService.updatePost(message, postId, user)
+                .map(post -> "redirect:/posts/{postId}")
                 .orElseThrow(CannotUpdateException::new);
     }
 
     @PostMapping("/{postId}/delete")
     public String processDeletion(@PathVariable("postId") int postId, @ModelAttribute UserSession userSession) throws Exception {
         User user = userSession.getUser().orElseThrow(UnauthenticatedException::new);
-        Post post = postService.findPostById(postId).orElseThrow(EntityNotFoundException::new);
-        boolean result = postService.deletePost(post, user);
+        boolean result = postService.deletePost(postId, user);
         if (result) {
             return "redirect:/posts";
         }

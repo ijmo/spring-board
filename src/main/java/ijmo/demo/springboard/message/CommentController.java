@@ -10,7 +10,6 @@ import ijmo.demo.springboard.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,7 +66,7 @@ public class CommentController extends BaseController {
     @PostMapping("/comments/{commentId}/delete")
     public ResponseEntity processDeletion(@PathVariable("commentId") long commentId, @ModelAttribute UserSession userSession) throws Exception {
         User user = userSession.getUser().orElseThrow(UnauthenticatedException::new);
-        boolean result = commentService.deleteCommentById(commentId, user);
+        boolean result = commentService.deleteComment(commentId, user);
         if (result) {
             return ResponseEntity.ok().build();
         }

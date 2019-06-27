@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,44 +33,42 @@ public class PostService {
         return postRepository.findByIdAndIsDeleted(id, false);
     }
 
-    private Optional<Post> addPost(Message message) {
-        if (message.getUser() != null) {
-            Post post = Post.builder().message(message).user(message.getUser()).build();
-            return Optional.ofNullable(postRepository.save(post));
-        }
-        return Optional.empty();
-    }
-
     @CacheEvict(value = "posts", allEntries = true)
     public Optional<Post> addPost(Message message, User user) {
+        message.setCreatedOn(ZonedDateTime.now());
         message.setUser(user);
-        return addPost(message);
+        Post post = Post.builder()
+                .message(message)
+                .user(message.getUser()).build();
+        return Optional.ofNullable(postRepository.save(post));
     }
 
     @Transactional
     @CacheEvict(value = "posts", allEntries = true)
-    public Optional<Post> updatePost(Message message, Post post, User user) throws UnauthorizedException {
-        if (!isAuthor(post, user)) {
+    public Optional<Post> updatePost(Message message, long postId, User user) throws UnauthorizedException {
+        Post post = findPostById(postId).orElseThrow(EntityNotFoundException::new);
+        if (!post.isWrittenBy(user)) {
             throw new UnauthorizedException();
         }
+        ZonedDateTime now = ZonedDateTime.now();
         message.setRevision(post.getMessages().size() + 1);
         message.setPost(post);
-        message.setUser(post.getUser());
+        message.setUser(user);
+        message.setCreatedOn(now);
         post.setMessage(message);
+        post.setModifiedOn(now);
         post.getMessages().add(message);
         return Optional.ofNullable(postRepository.save(post));
     }
 
     @CacheEvict(value = "posts", allEntries = true)
-    public boolean deletePost(Post post, User user) throws UnauthorizedException {
-        if (!isAuthor(post, user)) {
+    public boolean deletePost(long postId, User user) throws Exception {
+        Post post = findPostById(postId).orElseThrow(EntityNotFoundException::new);
+        if (!post.isWrittenBy(user)) {
             throw new UnauthorizedException();
         }
         post.setIsDeleted(true);
+        post.setModifiedOn(ZonedDateTime.now());
         return postRepository.save(post).getIsDeleted();
-    }
-
-    public boolean isAuthor(Post post, User user) {
-        return user.getId().equals(post.getUser().getId());
     }
 }
