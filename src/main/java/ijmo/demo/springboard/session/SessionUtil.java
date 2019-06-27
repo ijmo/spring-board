@@ -5,11 +5,11 @@ import ijmo.demo.springboard.user.User;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-public class SessionUtils {
+public class SessionUtil {
     public static final String USER_SESSION_KEY = "userSession";
 
     public static Optional<User> getUserFrom(HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute(SessionUtils.USER_SESSION_KEY);
+        UserSession userSession = (UserSession) session.getAttribute(SessionUtil.USER_SESSION_KEY);
         if (userSession != null) {
             return userSession.getUser();
         }
