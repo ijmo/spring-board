@@ -37,11 +37,11 @@ public class Message extends BaseEntity {
     @JsonIgnore
     private Boolean isDeleted = false;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Post post; // parent
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Comment comment; // parent
 
