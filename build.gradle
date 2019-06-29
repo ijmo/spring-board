@@ -28,6 +28,7 @@ configurations.all {
 }
 
 ext {
+    embeddedRedisVersion = "0.6"
     webjarsLocatorVersion = "0.36"
     jqueryVersion = "3.4.1"
     bootstrapVersion = "4.3.1"
@@ -38,19 +39,24 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.session:spring-session-data-redis'
+    compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
+    compile "com.github.kstyrc:embedded-redis:$embeddedRedisVersion"
     compile 'javax.cache:cache-api'
     compile 'org.hibernate:hibernate-ehcache'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compile "org.webjars:webjars-locator:$webjarsLocatorVersion"
     compile "org.webjars:jquery:$jqueryVersion"
     compile "org.webjars:bootstrap:$bootstrapVersion"
     compile "org.webjars.bower:moment:$momentVersion"
+    compile "org.webjars:webjars-locator:$webjarsLocatorVersion"
 }
