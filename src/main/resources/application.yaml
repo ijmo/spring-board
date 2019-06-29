@@ -4,3 +4,19 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     cache: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    port: 6379
+  data:
+    redis:
+      repositories:
+        enabled: false
+  cache:
+    jcache:
+      config: ehcache.xml
