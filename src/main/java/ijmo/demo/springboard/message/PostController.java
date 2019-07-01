@@ -35,7 +35,7 @@ public class PostController extends BaseController {
     }
 
     @GetMapping("")
-    public String showPostList(@CurrentUser User user, Model model) {
+    public String showPostList(Model model) {
         model.addAttribute("posts", postService.findAll());
         return "post/postList";
     }
