@@ -13,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.List;
 
-@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "users")
@@ -34,12 +33,16 @@ public class User extends BaseEntity {
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     private String authorities; // Collection<? extends GrantedAuthority>
 
+    public User() {
+        this.authorities = "ROLE_USER"; // role should start with "ROLE_" when set manually
+    }
+
     @Builder
     private User(String username, String password, String email) {
+        this();
         this.username = username;
         this.password = password;
         this.email = email;
-        this.authorities = "ROLE_USER"; // role should start with "ROLE_" when set manually
     }
 
     @Override
