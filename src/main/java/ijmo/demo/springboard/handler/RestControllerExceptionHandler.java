@@ -1,8 +1,7 @@
 package ijmo.demo.springboard.handler;
 
 import ijmo.demo.springboard.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -15,11 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class RestControllerExceptionHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(RestControllerExceptionHandler.class);
-
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public void notFound() {
