@@ -20,3 +20,10 @@ spring:
   cache:
     jcache:
       config: ehcache.xml
+  jpa:
+    properties:
+      hibernate:
+        connection:
+          charset: UTF-8
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
