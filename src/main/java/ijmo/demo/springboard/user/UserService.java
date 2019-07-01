@@ -1,10 +1,11 @@
 package ijmo.demo.springboard.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,12 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
     private PasswordEncoder encoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.encoder = new BCryptPasswordEncoder(12);
+        encoder = passwordEncoder();
     }
 
     public Optional<User> findByUsername(String username) {
@@ -41,7 +43,8 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    @Bean
     public PasswordEncoder passwordEncoder() {
-        return this.encoder;
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
