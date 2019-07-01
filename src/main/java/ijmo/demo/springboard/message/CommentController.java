@@ -33,7 +33,7 @@ public class CommentController extends BaseController {
     }
 
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity showCommentList(@PathVariable("postId") long postId) {
+    public ResponseEntity getCommentList(@PathVariable("postId") long postId) {
         return ResponseEntity.ok(commentService.findAllByPostId(postId));
     }
 
