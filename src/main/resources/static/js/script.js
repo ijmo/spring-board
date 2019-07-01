@@ -28,8 +28,8 @@ function getComments(postPath) {
             url: postPath + "/comments",
             type: "GET",
             success: function (data, textStatus, jqXHR) {
-                console.log(data);
-                console.log(jqXHR);
+                // console.debug(data);
+                // console.debug(jqXHR);
                 refreshComments(data);
             },
             error: getAjaxErrorHandler("getComments()")
@@ -61,8 +61,8 @@ $(document).ready(function() {
             contentType: "application/json",
             data: JSON.stringify({body: messageBody.val()}),
             success: function (data, textStatus, jqXHR) {
-                // console.log(data);
-                // console.log(jqXHR);
+                // console.debug(data);
+                // console.debug(jqXHR);
                 messageBody.val("");
                 getComments(path);
             },
