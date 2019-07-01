@@ -2,6 +2,7 @@ package ijmo.demo.springboard.message;
 
 import ijmo.demo.springboard.UnauthorizedException;
 import ijmo.demo.springboard.user.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CommentService {
 

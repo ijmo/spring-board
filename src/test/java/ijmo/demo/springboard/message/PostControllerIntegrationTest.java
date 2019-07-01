@@ -1,50 +1,68 @@
 package ijmo.demo.springboard.message;
 
 import ijmo.demo.springboard.test.BaseTest;
+import ijmo.demo.springboard.user.User;
+import ijmo.demo.springboard.user.UserService;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PostControllerIntegrationTest extends BaseTest {
+    @Autowired
+    private UserService userService;
 
     @Autowired
+    private WebApplicationContext context;
     private MockMvc mockMvc;
 
-    private MockHttpSession session;
-
     private final String USERNAME = "TestUser";
+    private final String PASSWORD = "test";
 
-    public void login() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/users/login")
-                .param("username", USERNAME)
-                .accept(MediaType.TEXT_HTML))
-                .andReturn();
+    @Before
+    public void setUp() {
+        try {
+            userService.loadUserByUsername(USERNAME);
+        } catch (UsernameNotFoundException e) {
+            userService.addUser(User.builder().username(USERNAME).password(PASSWORD).build());
+        }
+        if (mockMvc == null) {
+            mockMvc = MockMvcBuilders
+                    .webAppContextSetup(context)
+                    .apply(SecurityMockMvcConfigurers.springSecurity())
+                    .build();
+        }
+    }
 
-        session = (MockHttpSession) mvcResult.getRequest().getSession();
+    public UserDetails userPrincipal() {
+        return userService.loadUserByUsername(USERNAME);
     }
 
     @Test
     public void givenUserIsAuthenticated_whenListPosts_thenContainsNewPostButton() throws Exception {
-        login();
-        mockMvc.perform(MockMvcRequestBuilders.get("/posts")
-                .session(session)
+        mockMvc.perform(get("/posts")
+                .with(user(userPrincipal()))
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(USERNAME)))
@@ -55,20 +73,18 @@ public class PostControllerIntegrationTest extends BaseTest {
     public void givenUserIsAuthenticated_whenAddPost_thenNewPostShowsInList() throws Exception {
         final Message MESSAGE = newMessage("Post Title", "Post Body");
 
-        login();
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+        MvcResult mvcResult = mockMvc.perform(post("/posts/new")
+                .with(user(userPrincipal()))
                 .param("title", MESSAGE.getTitle())
                 .param("body", MESSAGE.getBody())
-                .session(session)
                 .accept(MediaType.TEXT_HTML))
                 .andReturn();
 
         String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
         Assert.assertNotNull(redirectUrl);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(redirectUrl)
-                .session(session)
+        mockMvc.perform(get(redirectUrl)
+                .with(user(userPrincipal()))
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(MESSAGE.getTitle())))
@@ -80,26 +96,24 @@ public class PostControllerIntegrationTest extends BaseTest {
         final Message MESSAGE1 = newMessage("Post Title 1", "Post Body 1");
         final Message MESSAGE2 = newMessage("Post Title 2", "Post Body 2");
 
-        login();
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+        MvcResult mvcResult = mockMvc.perform(post("/posts/new")
+                .with(user(userPrincipal()))
                 .param("title", MESSAGE1.getTitle())
                 .param("body", MESSAGE1.getBody())
-                .session(session)
                 .accept(MediaType.TEXT_HTML))
                 .andReturn();
 
         String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
         Assert.assertNotNull(redirectUrl);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(redirectUrl + "/edit")
+        mockMvc.perform(post(redirectUrl + "/edit")
+                .with(user(userPrincipal()))
                 .param("title", MESSAGE2.getTitle())
                 .param("body", MESSAGE2.getBody())
-                .session(session)
                 .accept(MediaType.TEXT_HTML));
 
-        mockMvc.perform(MockMvcRequestBuilders.get(redirectUrl)
-                .session(session)
+        mockMvc.perform(get(redirectUrl)
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(MESSAGE2.getTitle())))
@@ -110,24 +124,21 @@ public class PostControllerIntegrationTest extends BaseTest {
     public void givenUserIsAuthenticated_whenDeletePost_thenPostIsMissed() throws Exception {
         final Message MESSAGE = newMessage("Post Title", "Post Body");
 
-        login();
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+        MvcResult mvcResult = mockMvc.perform(post("/posts/new")
+                .with(user(userPrincipal()))
                 .param("title", MESSAGE.getTitle())
                 .param("body", MESSAGE.getBody())
-                .session(session)
                 .accept(MediaType.TEXT_HTML))
                 .andReturn();
 
         String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
         Assert.assertNotNull(redirectUrl);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(redirectUrl + "/delete")
-                .session(session)
+        mockMvc.perform(post(redirectUrl + "/delete")
+                .with(user(userPrincipal()))
                 .accept(MediaType.TEXT_HTML));
 
-        mockMvc.perform(MockMvcRequestBuilders.get(redirectUrl)
-                .session(session)
+        mockMvc.perform(get(redirectUrl)
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(content().string(not(containsString(MESSAGE.getTitle()))))
                 .andExpect(content().string(not(containsString(MESSAGE.getBody()))))
@@ -135,58 +146,54 @@ public class PostControllerIntegrationTest extends BaseTest {
     }
 
     @Test
-    public void whenAddPost_thenUnauthorized() throws Exception {
+    public void whenAddPost_thenRedirection() throws Exception {
         final Message MESSAGE = newMessage("Post Title", "Post Body");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+        mockMvc.perform(post("/posts/new")
                 .param("title", MESSAGE.getTitle())
                 .param("body", MESSAGE.getBody())
                 .accept(MediaType.TEXT_HTML))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
-    public void whenUpdatePost_thenUnauthorized() throws Exception {
+    public void whenUpdatePost_thenRedirection() throws Exception {
         final Message MESSAGE1 = newMessage("Post Title 1", "Post Body 1");
         final Message MESSAGE2 = newMessage("Post Title 2", "Post Body 2");
 
-        login();
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+        MvcResult mvcResult = mockMvc.perform(post("/posts/new")
+                .with(user(userPrincipal()))
                 .param("title", MESSAGE1.getTitle())
                 .param("body", MESSAGE1.getBody())
-                .session(session)
                 .accept(MediaType.TEXT_HTML))
                 .andReturn();
 
         String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
         Assert.assertNotNull(redirectUrl);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(redirectUrl + "/edit")
+        mockMvc.perform(post(redirectUrl + "/edit")
                 .param("title", MESSAGE2.getTitle())
                 .param("body", MESSAGE2.getBody())
                 .accept(MediaType.TEXT_HTML))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
-    public void whenDeletePost_thenUnauthorized() throws Exception {
+    public void whenDeletePost_thenRedirection() throws Exception {
         final Message MESSAGE = newMessage("Post Title", "Post Body");
 
-        login();
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/posts/new")
+        MvcResult mvcResult = mockMvc.perform(post("/posts/new")
+                .with(user(userPrincipal()))
                 .param("title", MESSAGE.getTitle())
                 .param("body", MESSAGE.getBody())
-                .session(session)
                 .accept(MediaType.TEXT_HTML))
                 .andReturn();
 
         String redirectUrl = mvcResult.getResponse().getRedirectedUrl();
         Assert.assertNotNull(redirectUrl);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(redirectUrl + "/delete")
+        mockMvc.perform(post(redirectUrl + "/delete")
                 .accept(MediaType.TEXT_HTML))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is3xxRedirection());
     }
 }

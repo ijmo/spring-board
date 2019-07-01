@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
 <body>
-  <div class="text-right" th:if="${user}" style="margin: 20px 0;">
+  <div class="text-right" sec:authorize="isAuthenticated()" style="margin: 20px 0;">
     <button type="button" class="btn-primary" onclick="location.href='/posts/new'">New Post</button>
   </div>
   <div>

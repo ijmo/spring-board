@@ -1,19 +1,20 @@
 package ijmo.demo.springboard.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ijmo.demo.springboard.model.BaseEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import java.util.Collection;
+import java.util.List;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
@@ -22,9 +23,23 @@ public class User extends BaseEntity {
     @NotBlank
     private String username;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "authorities")
+    @JsonIgnore
+    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    private String authorities; // Collection<? extends GrantedAuthority>
+
     @Builder
-    private User(String username) {
+    private User(String username, String password, String email) {
         this.username = username;
+        this.password = password;
+        this.email = email;
+        this.authorities = "ROLE_USER"; // role should start with "ROLE_" when set manually
     }
 
     @Override
@@ -33,5 +48,17 @@ public class User extends BaseEntity {
             return getId().hashCode();
         }
         return super.hashCode();
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+    }
+
+    public void setAuthorities(String commaSeparatedAuthorities) {
+        authorities = commaSeparatedAuthorities;
+    }
+
+    public void setAuthorities(List<String> authorities) {
+        this.authorities = String.join(",", authorities);
     }
 }

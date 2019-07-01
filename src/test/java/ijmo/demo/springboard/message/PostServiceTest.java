@@ -9,12 +9,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@ComponentScan("ijmo.demo.springboard.system")
 public class PostServiceTest extends BaseTest {
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -29,7 +34,9 @@ public class PostServiceTest extends BaseTest {
 
     @Before
     public void setUp() {
-        user = userRepository.save(User.builder().username("test1").build());
+        final String USERNAME = "TestUser";
+        final String PASSWORD = "test";
+        user = userRepository.save(User.builder().username(USERNAME).password(encoder.encode(PASSWORD)).build());
     }
 
     @Test

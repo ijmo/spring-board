@@ -23,14 +23,15 @@ public class UserServiceTest extends BaseTest {
 
     @Test
     public void whenAddUser_thenSavedToRepository() {
-        final String USERNAME1 = "test1";
+        final String USERNAME = "TestUser";
+        final String PASSWORD = "test";
 
-        userService.loginOrSignUp(USERNAME1);
-        Optional<User> optionalUser = userRepository.findByUsername(USERNAME1);
+        userService.addUser(User.builder().username(USERNAME).password(PASSWORD).build());
+        Optional<User> optionalUser = userRepository.findByUsername(USERNAME);
 
         softAssertions.assertThat(optionalUser.orElse(null)).isNotNull();
 
         softAssertions.assertThat(optionalUser.get().getUsername())
-                .isEqualTo(USERNAME1);
+                .isEqualTo(USERNAME);
     }
 }

@@ -2,8 +2,7 @@ package ijmo.demo.springboard.message;
 
 import ijmo.demo.springboard.UnauthorizedException;
 import ijmo.demo.springboard.user.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -14,9 +13,9 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class PostService {
-    private static final Logger log = LoggerFactory.getLogger(PostService.class);
     private PostRepository postRepository;
 
     public PostService(PostRepository postRepository) {
@@ -25,7 +24,6 @@ public class PostService {
 
     @Cacheable("posts")
     public List<Post> findAll() {
-        log.debug("findAll()");
         return postRepository.findAllByIsDeletedOrderByCreatedOnDesc(false);
     }
 

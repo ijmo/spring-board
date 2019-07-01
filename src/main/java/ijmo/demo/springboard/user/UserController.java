@@ -1,21 +1,12 @@
 package ijmo.demo.springboard.user;
 
 import ijmo.demo.springboard.handler.BaseController;
-import ijmo.demo.springboard.session.UserSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.support.SessionStatus;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import java.util.Optional;
-
+@Slf4j
 @Controller
-@RequestMapping("/users")
 public class UserController extends BaseController {
 
     private final UserService userService;
@@ -24,28 +15,13 @@ public class UserController extends BaseController {
         this.userService = userService;
     }
 
-    @GetMapping("/new")
+    @GetMapping("/users/new")
     public String initCreationForm() {
         return "";
     }
 
-    @GetMapping("/find")
+    @GetMapping("/users/find")
     public String initFindForm() {
         return "";
-    }
-
-    @PostMapping("/login")
-    public String processLoginForm(@ModelAttribute UserSession userSession, @Valid @NotBlank String username, BindingResult result) {
-        Optional.ofNullable(result)
-                .filter(r -> !r.hasErrors())
-                .ifPresent(r -> userSession.setUser(userService.loginOrSignUp(username)));
-        return "redirect:/";
-    }
-
-    @GetMapping("/logout")
-    public String processLogout(@ModelAttribute UserSession userSession, SessionStatus session) {
-        userSession.kickUser();
-        session.setComplete();
-        return "redirect:/";
     }
 }
