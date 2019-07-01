@@ -3,7 +3,7 @@
       th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
 <body>
   <div class="text-right" sec:authorize="isAuthenticated()" style="margin: 20px 0;">
-    <button type="button" class="btn-primary" onclick="location.href='/posts/new'">New Post</button>
+    <button type="button" class="btn btn-outline-primary" onclick="location.href='/posts/new'">New Post</button>
   </div>
   <div>
     <table id="posts" class="table table-hover table-sm">
