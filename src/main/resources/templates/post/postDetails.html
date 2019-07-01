@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      th:replace="~{layout/baseLayout :: layout (~{::body}, 'home')}">
 <body>
   <th:block th:object="${post}">
     <div class="d-flex justify-content-end">
       <div class="px-2"><button type="button" th:onclick="'location.href=\'/posts/' + *{id} + '/edit\''">Edit</button></div>
       <div class="px-2"><form method="post" th:action="'/posts/' + *{id} + '/delete'"><button type="submit">Delete</button></form></div>
     </div>
-    <div class="my-3 p-2 border rounded-lg">
-      <div class="d-flex py-2 border-bottom">
-        <div class="mr-auto"><span th:text="*{message?.title}"></span></div>
-        <div class="border-left px-lg-4"><span th:text="*{user?.username}"></span></div>
-        <div><span class="date" th:text="*{#temporals.format(createdOn, 'yyyy-MM-dd HH:mm')}"></span></div>
-      </div>
-      <div class="d-flex py-lg-4">
-        <span class="post-text" th:text="*{message?.body}"></span>
+    <div class="my-3 border rounded-lg">
+      <div class="container">
+        <div class="d-flex py-2 border-bottom">
+          <div class="mr-auto"><span th:text="*{message?.title}"></span></div>
+          <div class="border-left px-lg-4"><span th:text="*{user?.username}"></span></div>
+          <div><span class="date" th:text="*{#temporals.format(createdOn, 'yyyy-MM-dd HH:mm')}"></span></div>
+        </div>
+        <div class="d-flex py-lg-4"><span th:text="*{message?.body}"></span></div>
       </div>
     </div>
     <div id="comments-header">
@@ -21,12 +22,13 @@
     </div>
     <div id="comments"></div>
     <div class="d-flex">
-      <form class="w-100" id="form-comment">
+      <form class="w-100" id="form-comment" th:data-authenticated="${#authentication.principal} != 'anonymousUser'? true : false">
         <div class="form-group">
-          <textarea class="form-control" id="body" name="body" placeholder="Write a comment..." ></textarea>
+          <textarea class="form-control" id="body" name="body" sec:authorize="isAuthenticated()" placeholder="Write a comment..." ></textarea>
+          <textarea class="form-control" id="body" name="body" sec:authorize="isAnonymous()" placeholder="Login if you want to leave a message..." ></textarea>
         </div>
-        <div class="text-right">
-        <button type="submit">Post</button>
+        <div class="text-right" >
+          <button type="submit" sec:authorize="isAuthenticated()">Post</button>
         </div>
       </form>
     </div>
