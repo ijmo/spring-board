@@ -20,7 +20,10 @@
             <div class="form-group">
               <input type="password" class="form-control" name="password" placeholder="Password" required />
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='/signup'">Sign up</button>
           </form>
         </th:block>
         <th:block sec:authorize="isAuthenticated()">
@@ -28,7 +31,7 @@
             <div class="form-group">
               <label class="text-secondary mr-2" for="username">Username:</label><span id="username" class="text-white" sec:authentication="name"></span>
             </div>
-            <button type="submit" class="btn btn-secondary">Logout</button>
+            <button type="submit" class="btn btn-secondary">Sign out</button>
           </form>
         </th:block>
         <br/>

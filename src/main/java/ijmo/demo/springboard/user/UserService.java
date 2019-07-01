@@ -4,8 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -13,9 +16,13 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private PasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder encoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.encoder = encoder;
+        this.encoder = new BCryptPasswordEncoder(12);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public User addUser(User user) {
@@ -23,15 +30,18 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public User updateUsername(User user, String username) {
-        user.setUsername(username);
+    public User updateUser(User user) {
         return userRepository.save(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
+        return findByUsername(username)
                 .map(UserPrincipal::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    public PasswordEncoder passwordEncoder() {
+        return this.encoder;
     }
 }

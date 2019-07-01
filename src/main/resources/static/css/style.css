@@ -33,6 +33,14 @@ button {
   cursor: pointer;
 }
 
+#form-signin {
+  width: 400px;
+}
+
+#form-login {
+  width: 200px;
+}
+
 #form-post textarea.form-control {
   height: 400px;
 }

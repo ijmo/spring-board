@@ -28,8 +28,8 @@ function getComments(postPath) {
             url: postPath + "/comments",
             type: "GET",
             success: function (data, textStatus, jqXHR) {
-                // console.debug(data);
-                // console.debug(jqXHR);
+                // console.log(data);
+                // console.log(jqXHR);
                 refreshComments(data);
             },
             error: getAjaxErrorHandler("getComments()")
@@ -47,22 +47,38 @@ $(document).ready(function() {
     // Event handlers
     ///////////////////////////////////////////////////////
 
+    // password check in sign in form
+    // $("#form-signin").input(function() {
+    //     $(this).find("#password1").
+    // });
+
     // post list table row
     $("#posts tbody tr").click(function() {
         window.location = $(this).data("href");
     });
 
+    // textarea for new comment in postDetails.html
+    $("#form-comment textarea#body").focus(function() {
+        var authenticated = $("#form-comment").data("authenticated");
+        if (authenticated === false) {
+            window.location = "/login";
+        }
+    });
+
     // button for new comment in postDetails.html
     $("#form-comment").submit(function() {
-        var messageBody = $("#form-comment #body");
+        var messageBody = $(this).find("#body");
+
+        console.log($(this).serialize());
+        console.log(JSON.stringify({body: messageBody.val()}));
         $.ajax({
             url: path + "/comments/new",
             type: "post",
             contentType: "application/json",
             data: JSON.stringify({body: messageBody.val()}),
             success: function (data, textStatus, jqXHR) {
-                // console.debug(data);
-                // console.debug(jqXHR);
+                // console.log(data);
+                // console.log(jqXHR);
                 messageBody.val("");
                 getComments(path);
             },
