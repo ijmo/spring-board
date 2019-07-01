@@ -2,27 +2,19 @@ package ijmo.demo.springboard.message;
 
 import ijmo.demo.springboard.test.BaseTest;
 import ijmo.demo.springboard.user.User;
-import ijmo.demo.springboard.user.UserRepository;
+import ijmo.demo.springboard.user.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@ComponentScan("ijmo.demo.springboard.system")
 public class PostServiceTest extends BaseTest {
-
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -30,13 +22,16 @@ public class PostServiceTest extends BaseTest {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private UserService userService;
+
     private User user;
 
     @Before
     public void setUp() {
         final String USERNAME = "TestUser";
         final String PASSWORD = "test";
-        user = userRepository.save(User.builder().username(USERNAME).password(encoder.encode(PASSWORD)).build());
+        user = userService.addUser(User.builder().username(USERNAME).password(PASSWORD).build());
     }
 
     @Test

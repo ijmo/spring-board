@@ -2,14 +2,13 @@ package ijmo.demo.springboard.message;
 
 import ijmo.demo.springboard.test.BaseTest;
 import ijmo.demo.springboard.user.User;
-import ijmo.demo.springboard.user.UserRepository;
+import ijmo.demo.springboard.user.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -19,14 +18,7 @@ import java.util.stream.IntStream;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@ComponentScan("ijmo.demo.springboard.system")
 public class CommentServiceTest extends BaseTest {
-
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -37,6 +29,9 @@ public class CommentServiceTest extends BaseTest {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private UserService userService;
+
     private User user;
     private Post post;
 
@@ -44,7 +39,7 @@ public class CommentServiceTest extends BaseTest {
     public void setUp() {
         final String USERNAME = "TestUser";
         final String PASSWORD = "test";
-        user = userRepository.save(User.builder().username(USERNAME).password(encoder.encode(PASSWORD)).build());
+        user = userService.addUser(User.builder().username(USERNAME).password(PASSWORD).build());
         post = postService.addPost(newMessage("Post title 1", "Post body 1"), user).orElse(null);
     }
 
