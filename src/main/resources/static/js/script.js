@@ -1,4 +1,3 @@
-
 function getAjaxErrorHandler(msg) {
     return function(jqXHR, textStatus, errorThrown) {
         console.error("error while " + msg + " : " + jqXHR.status);
@@ -37,6 +36,14 @@ function getComments(postPath) {
     }
 }
 
+function makeCSRFHeader() {
+    var token = $("meta[name='_csrf']").attr("content");
+    var headerName = $("meta[name='_csrf_header']").attr("content");
+    var headers = {};
+    headers[headerName] = token;
+    return headers;
+}
+
 $(document).ready(function() {
     console.log("Welcome to Spring Board Demo!!");
 
@@ -46,11 +53,6 @@ $(document).ready(function() {
     ///////////////////////////////////////////////////////
     // Event handlers
     ///////////////////////////////////////////////////////
-
-    // password check in sign in form
-    // $("#form-signin").input(function() {
-    //     $(this).find("#password1").
-    // });
 
     // post list table row
     $("#posts tbody tr").click(function() {
@@ -68,13 +70,11 @@ $(document).ready(function() {
     // button for new comment in postDetails.html
     $("#form-comment").submit(function() {
         var messageBody = $(this).find("#body");
-
-        console.log($(this).serialize());
-        console.log(JSON.stringify({body: messageBody.val()}));
         $.ajax({
             url: path + "/comments/new",
             type: "post",
             contentType: "application/json",
+            headers: makeCSRFHeader(),
             data: JSON.stringify({body: messageBody.val()}),
             success: function (data, textStatus, jqXHR) {
                 // console.log(data);

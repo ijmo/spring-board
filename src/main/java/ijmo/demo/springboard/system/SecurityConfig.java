@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         final List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         http
-                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/posts/new",
                         "/posts/{\\d+}/edit",
@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID");
 
         if (activeProfiles.contains("dev")) {
+            http.csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("!/h2-console/**")) ;
             http.headers().frameOptions().disable(); // for h2-console
         }
     }
