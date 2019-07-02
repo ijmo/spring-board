@@ -18,4 +18,6 @@ $ ./gradlew bootRun
 ## Screenshots
 <img src="/images/screenshot1.png?raw=true" width="640">
 
+<img src="/images/screenshot2.png?raw=true" width="640">
+
 <img src="/images/screenshot3.png?raw=true" width="640">
