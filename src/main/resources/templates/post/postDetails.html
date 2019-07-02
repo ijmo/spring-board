@@ -4,6 +4,7 @@
 <body>
   <th:block th:object="${post}">
     <div class="d-flex justify-content-end" th:if="${#authentication.principal} != 'anonymousUser'? (${#authentication.principal.user.id} == *{user?.id} ) : false">
+      <div class="px-2"><button type="button" class="btn btn-block btn-outline-info" data-toggle="modal" data-target="#historyModal" th:onclick="'showHistory(\'post\', ' + *{id} + ')'">Show History</button></div>
       <div class="px-2"><button type="button" class="btn btn-outline-info" th:onclick="'location.href=\'/posts/' + *{id} + '/edit\''">Edit</button></div>
       <div class="px-2"><form method="post" th:action="'/posts/' + *{id} + '/delete'"><button type="submit" class="btn btn-outline-danger">Delete</button></form></div>
     </div>
@@ -32,6 +33,29 @@
           <button type="submit" class="btn btn-outline-primary" sec:authorize="isAuthenticated()">Post</button>
         </div>
       </form>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="historyModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">History</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
     </div>
   </th:block>
 </body>

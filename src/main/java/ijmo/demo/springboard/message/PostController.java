@@ -8,11 +8,14 @@ import ijmo.demo.springboard.handler.BaseController;
 import ijmo.demo.springboard.user.CurrentUser;
 import ijmo.demo.springboard.user.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -46,6 +49,14 @@ public class PostController extends BaseController {
                 .map(model::addAttribute)
                 .orElseThrow(EntityNotFoundException::new);
         return "post/postDetails";
+    }
+
+    @GetMapping("/{postId}/history")
+    @ResponseBody
+    public ResponseEntity getPostHistory(@PathVariable("postId") int postId) {
+        Post post = postService.findPostById(postId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found!", new EntityNotFoundException()));
+        return ResponseEntity.ok(post.getMessages());
     }
 
     @GetMapping("/new")
