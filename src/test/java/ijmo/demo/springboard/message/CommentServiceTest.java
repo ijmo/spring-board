@@ -3,6 +3,7 @@ package ijmo.demo.springboard.message;
 import ijmo.demo.springboard.test.BaseTest;
 import ijmo.demo.springboard.user.User;
 import ijmo.demo.springboard.user.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,9 @@ public class CommentServiceTest extends BaseTest {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private PostService postService;
@@ -56,9 +60,7 @@ public class CommentServiceTest extends BaseTest {
         Arrays.asList(MESSAGES).forEach(message -> post.addComment(newComment(message, post, user)));
         postRepository.save(post); // should call save() unless you invoke Post::addComment from request
 
-        softAssertions.assertThat(postService.findPostById(1).isPresent()).isTrue();
-
-        Post post = postService.findPostById(1).get();
+        softAssertions.assertThat(post.getComments().size()).isGreaterThan(0);
 
         IntStream.range(0, MESSAGES.length)
                 .forEach(i -> softAssertions.assertThat(post.getComments().get(i).getMessage().getBody())
@@ -69,5 +71,33 @@ public class CommentServiceTest extends BaseTest {
         IntStream.range(0, MESSAGES.length)
                 .forEach(i -> softAssertions.assertThat(comments.get(i).getMessage().getBody())
                         .isEqualTo(MESSAGES[i].getBody()));
+    }
+
+    @Test
+    public void givenUserIsAuthenticated_whenModifyComment_thenCommentIsUpdated() throws Exception {
+        final Message MESSAGE1 = newMessage("Comment body 1");
+        final Message MESSAGE2 = newMessage("Comment body 2");
+        Comment original = commentService.addComment(MESSAGE1, post.getId(), user).orElse(null);
+        softAssertions.assertThat(original).isNotNull();
+
+        Comment updated = commentService.updateComment(MESSAGE2, original.getId(), user).orElse(null);
+        softAssertions.assertThat(updated).isNotNull();
+        softAssertions.assertThat(updated.getMessage().getBody()).isEqualTo(MESSAGE2.getBody());
+    }
+
+    @Test
+    public void givenUserIsAuthenticated_whenDeleteComment_thenCommentIsDeleted() throws Exception {
+        final Message MESSAGE = newMessage("Comment body");
+        Comment comment = commentService.addComment(MESSAGE, post.getId(), user).orElse(null);
+        softAssertions.assertThat(comment).isNotNull();
+
+        boolean result = commentService.deleteComment(comment.getId(), user);
+        softAssertions.assertThat(result).isTrue();
+
+        Comment deleted = commentRepository.findAllByPostIdAndIsDeleted(post.getId(), true).stream()
+                .filter(c -> StringUtils.equals(c.getMessage().getBody(), MESSAGE.getBody()))
+                .findFirst()
+                .orElse(null);
+        softAssertions.assertThat(deleted).isNotNull();
     }
 }

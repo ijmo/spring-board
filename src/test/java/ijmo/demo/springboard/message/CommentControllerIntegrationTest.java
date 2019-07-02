@@ -26,6 +26,7 @@ import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -110,6 +111,7 @@ public class CommentControllerIntegrationTest extends BaseTest {
             mockMvc.perform(post("/posts/" + aPost.getId() + "/comments/new")
                     .content(content)
                     .with(user(userPrincipal()))
+                    .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
         }
@@ -132,6 +134,7 @@ public class CommentControllerIntegrationTest extends BaseTest {
         mockMvc.perform(post("/posts/" + aPost.getId() + "/comments/new")
                 .content(mapper.writeValueAsString(data))
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -148,11 +151,11 @@ public class CommentControllerIntegrationTest extends BaseTest {
         mockMvc.perform(post("/comments/"+ comments.get(0).get("id") + "/edit")
                 .content(mapper.writeValueAsString(data))
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/posts/" + aPost.getId() + "/comments")
-                .with(user(userPrincipal()))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(not(containsString(MESSAGE1.getBody()))))
@@ -185,6 +188,7 @@ public class CommentControllerIntegrationTest extends BaseTest {
         mockMvc.perform(post("/posts/" + aPost.getId() + "/comments/new")
                 .content(mapper.writeValueAsString(data))
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 

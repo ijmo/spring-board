@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -75,6 +76,7 @@ public class PostControllerIntegrationTest extends BaseTest {
 
         MvcResult mvcResult = mockMvc.perform(post("/posts/new")
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .param("title", MESSAGE.getTitle())
                 .param("body", MESSAGE.getBody())
                 .accept(MediaType.TEXT_HTML))
@@ -85,6 +87,7 @@ public class PostControllerIntegrationTest extends BaseTest {
 
         mockMvc.perform(get(redirectUrl)
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(MESSAGE.getTitle())))
@@ -99,6 +102,7 @@ public class PostControllerIntegrationTest extends BaseTest {
 
         MvcResult mvcResult = mockMvc.perform(post("/posts/new")
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .param("title", MESSAGE1.getTitle())
                 .param("body", MESSAGE1.getBody())
                 .accept(MediaType.TEXT_HTML))
@@ -109,6 +113,7 @@ public class PostControllerIntegrationTest extends BaseTest {
 
         mockMvc.perform(post(redirectUrl + "/edit")
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .param("title", MESSAGE2.getTitle())
                 .param("body", MESSAGE2.getBody())
                 .accept(MediaType.TEXT_HTML));
@@ -126,6 +131,7 @@ public class PostControllerIntegrationTest extends BaseTest {
 
         MvcResult mvcResult = mockMvc.perform(post("/posts/new")
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .param("title", MESSAGE.getTitle())
                 .param("body", MESSAGE.getBody())
                 .accept(MediaType.TEXT_HTML))
@@ -136,13 +142,14 @@ public class PostControllerIntegrationTest extends BaseTest {
 
         mockMvc.perform(post(redirectUrl + "/delete")
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .accept(MediaType.TEXT_HTML));
 
         mockMvc.perform(get(redirectUrl)
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(content().string(not(containsString(MESSAGE.getTitle()))))
                 .andExpect(content().string(not(containsString(MESSAGE.getBody()))))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -163,6 +170,7 @@ public class PostControllerIntegrationTest extends BaseTest {
 
         MvcResult mvcResult = mockMvc.perform(post("/posts/new")
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .param("title", MESSAGE1.getTitle())
                 .param("body", MESSAGE1.getBody())
                 .accept(MediaType.TEXT_HTML))
@@ -184,6 +192,7 @@ public class PostControllerIntegrationTest extends BaseTest {
 
         MvcResult mvcResult = mockMvc.perform(post("/posts/new")
                 .with(user(userPrincipal()))
+                .with(csrf())
                 .param("title", MESSAGE.getTitle())
                 .param("body", MESSAGE.getBody())
                 .accept(MediaType.TEXT_HTML))
