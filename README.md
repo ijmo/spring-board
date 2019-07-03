@@ -1,4 +1,4 @@
-# Spring board demo
+# Spring board
 
 A simple bulletin board built with Spring Boot 2.
 
