@@ -163,6 +163,42 @@ public class CommentControllerIntegrationTest extends BaseTest {
     }
 
     @Test
+    public void givenUserIsAuthenticated_whenDeleteComment_thenCommentIsNotShown() throws Exception {
+        final Message MESSAGE = newMessage("Comment Body");
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> data = new HashMap<>();
+        data.put("body", MESSAGE.getBody());
+        String content = mapper.writeValueAsString(data);
+        mockMvc.perform(post("/posts/" + aPost.getId() + "/comments/new")
+                .content(content)
+                .with(user(userPrincipal()))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        // Get comment's id
+        MvcResult mvcResult = mockMvc.perform(get("/posts/" + aPost.getId() + "/comments")
+                .accept(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        List<Map<String, Object>> comments = mapper.readValue(mvcResult.getResponse().getContentAsString(),
+                new TypeReference<List<Map<String, Object>>>(){});
+        softAssertions.assertThat(comments.size()).as("").isGreaterThan(0);
+
+        mockMvc.perform(post("/comments/" + comments.get(0).get("id") + "/delete")
+                .with(user(userPrincipal()))
+                .with(csrf())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/posts/" + aPost.getId() + "/comments")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString(MESSAGE.getBody()))));
+    }
+
+    @Test
     public void whenAddComment_thenRedirection() throws Exception {
         final Message MESSAGE = newMessage("Comment Body");
 
