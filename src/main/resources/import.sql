@@ -1,10 +1,10 @@
 -- user with id: a / pw: a
 INSERT INTO users (authorities, email, password, username)
-VALUES ('ROLE_USER', NULL, '{bcrypt}$2a$10$Pi5rS9cBzaqop5UwvdgsROADAASHo0igVQj2jm9LzKajIlpiuzw9i', 'a');
+VALUES ('ROLE_USER', NULL, '{noop}a', 'a');
 
 -- user with id: test / pw: test
 INSERT INTO users (authorities, email, password, username)
-VALUES ('ROLE_USER', NULL, '{bcrypt}$2a$12$MNFcg19Su6PDBRbMcyZ4K.I1mu8k8Flq6332Gtu/M3cT7qCB4mt9.', 'test');
+VALUES ('ROLE_USER', NULL, '{noop}test', 'test');
 
 INSERT INTO posts (user_id, message_id, comment_count, is_deleted, created_on)
 SELECT id, NULL, 0, 0, now()
