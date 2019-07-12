@@ -25,8 +25,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -66,6 +65,7 @@ public class PostControllerIntegrationTest extends BaseTest {
                 .with(user(userPrincipal()))
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
+                .andExpect(view().name("post/postList"))
                 .andExpect(content().string(containsString(USERNAME)))
                 .andExpect(content().string(containsString("New Post")));
     }
@@ -90,6 +90,7 @@ public class PostControllerIntegrationTest extends BaseTest {
                 .with(csrf())
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
+                .andExpect(view().name("post/postDetails"))
                 .andExpect(content().string(containsString(MESSAGE.getTitle())))
                 .andExpect(content().string(containsString(MESSAGE.getBody())));
     }
@@ -121,6 +122,7 @@ public class PostControllerIntegrationTest extends BaseTest {
         mockMvc.perform(get(redirectUrl)
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
+                .andExpect(view().name("post/postDetails"))
                 .andExpect(content().string(containsString(MESSAGE2.getTitle())))
                 .andExpect(content().string(containsString(MESSAGE2.getBody())));
     }
@@ -149,7 +151,8 @@ public class PostControllerIntegrationTest extends BaseTest {
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(content().string(not(containsString(MESSAGE.getTitle()))))
                 .andExpect(content().string(not(containsString(MESSAGE.getBody()))))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error"));
     }
 
     @Test
