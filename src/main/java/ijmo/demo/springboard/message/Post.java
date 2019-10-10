@@ -20,7 +20,7 @@ import java.util.List;
 @Table(name = "posts")
 public class Post extends BaseEntity {
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     private Message message;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
@@ -44,7 +44,7 @@ public class Post extends BaseEntity {
     @JsonIgnore
     private Boolean isDeleted = false;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @Builder

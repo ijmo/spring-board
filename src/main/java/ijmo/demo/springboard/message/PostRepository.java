@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Transactional(readOnly = true)
-    @EntityGraph(attributePaths = {"message"})
+    @EntityGraph(attributePaths = {"message", "user"})
     List<Post> findAllByIsDeletedOrderByCreatedOnDesc(boolean isDeleted);
 
-    @EntityGraph(attributePaths = {"message"})
+    @EntityGraph(attributePaths = {"message", "user"})
     Optional<Post> findByIdAndIsDeleted(long postId, boolean isDeleted);
 }

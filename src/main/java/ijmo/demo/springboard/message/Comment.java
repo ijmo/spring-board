@@ -41,7 +41,7 @@ public class Comment extends BaseEntity {
     @JsonIgnore
     private Boolean isDeleted = false;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @Builder

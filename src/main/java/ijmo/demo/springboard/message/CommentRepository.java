@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Transactional(readOnly = true)
-    @EntityGraph(attributePaths = {"message"})
+    @EntityGraph(attributePaths = {"message", "user"})
     List<Comment> findAllByPostIdAndIsDeleted(long postId, boolean isDeleted);
 }
